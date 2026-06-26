@@ -14,6 +14,11 @@ Current **SW cache = v15** (footer badge `v15`).
 **v15:** the top-right **Clear all** button now has a **green glow** (lime border + glow, brighter on
 hover) instead of the old red-on-hover styling.
 
+> 📌 **Versioning convention (set 2026-06-26):** stay on **15** and bump the **decimal** each deploy —
+> next is **v15.1**, then **v15.2**, and so on, **until Luke says otherwise**. Bump both the
+> `CACHE = 'smoothie-v15.x'` const in `smoothie_sw.js` **and** the `<span id="appVer">v15.x</span>`
+> footer badge on every deploy.
+
 **How custom recipes integrate:** they merge into the live `RECIPES` / `ING` so every existing view
 (Recipes tab, shopping list, store mode, phone sync) picks them up for free.
 - New state: `S.customRecipes` (RECIPES-shaped, `cat:'My finds'`) + `S.customIngredients`
