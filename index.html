@@ -196,6 +196,64 @@
   .mcard h3{font-size:18px;margin-bottom:6px;}.mcard p{color:var(--mut);font-size:13.5px;margin-bottom:14px;}
   #previewImg{width:100%;border-radius:10px;border:1px solid var(--line);display:block;margin-bottom:14px;}
   .mrow{display:flex;gap:9px;flex-wrap:wrap;}.mrow .btn{flex:1;}
+
+  /* ===== prevent any horizontal cut-off ===== */
+  html,body{max-width:100%;overflow-x:hidden;}
+  img,canvas{max-width:100%;}
+  *{min-width:0;}
+
+  /* ===== iPhone / small screens ===== */
+  @media(max-width:600px){
+    .wrap{padding:0 13px;}
+    header{padding:26px 0 16px;}
+    h1{font-size:29px;}
+    .sub{font-size:14px;}
+    .tabs{gap:6px;padding:10px 0;}
+    .tab{padding:9px 12px;font-size:13px;}
+    .grid{grid-template-columns:1fr;}
+    .ringred{grid-template-columns:1fr;}
+    .recipe,.ing,.info,.summary,.syncwrap,.histwrap{padding:16px;border-radius:14px;}
+    .recipe h3{font-size:18px;}
+    .listbar{gap:7px;}
+    .listbar .btn{flex:1 1 44%;text-align:center;}
+    .lrow{padding:14px 13px;gap:11px;}
+    .lname{font-size:15px;}
+    .lname .lpkg{display:block;margin-left:0;margin-top:2px;white-space:normal;}
+    .lqty{font-size:15px;}
+    .vs{grid-template-columns:1fr;}
+    .syncjoin{flex-direction:column;}
+    .syncjoin input{min-width:0;}
+  }
+
+  /* ===== iPhone Checklist (full-screen store mode) ===== */
+  #storeModal{position:fixed;inset:0;background:var(--bg);z-index:80;display:none;flex-direction:column;}
+  #storeModal.show{display:flex;}
+  .st-head{background:var(--card);border-bottom:1px solid var(--line);padding:16px 16px 14px;}
+  .st-top{display:flex;align-items:center;gap:12px;}
+  .st-title{font-size:20px;font-weight:800;flex:1;line-height:1.15;}
+  .st-title small{display:block;font-size:12px;color:var(--mut);font-weight:600;margin-top:2px;}
+  .st-close{background:var(--card2);border:1px solid var(--line);color:var(--txt);font-size:18px;font-weight:700;min-width:42px;height:42px;border-radius:12px;cursor:pointer;}
+  .st-prog{font-size:13.5px;color:var(--mut);margin-top:12px;}
+  .st-prog b{color:var(--lime);font-weight:800;}
+  .st-prog b.gold{color:var(--gold);}
+  .st-bar{height:9px;background:#0a0f0c;border:1px solid var(--line);border-radius:99px;overflow:hidden;margin-top:8px;}
+  .st-bar-fill{height:100%;background:linear-gradient(90deg,var(--lime2),var(--lime));border-radius:99px;transition:width .3s;}
+  .st-filters{display:flex;gap:7px;margin-top:12px;}
+  .st-body{flex:1;overflow-y:auto;padding:10px 14px 60px;-webkit-overflow-scrolling:touch;}
+  .st-group{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:700;margin:18px 4px 9px;}
+  .st-row{display:flex;align-items:center;gap:14px;padding:16px 15px;background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:9px;cursor:pointer;transition:.12s;}
+  .st-row:active{transform:scale(.99);}
+  .st-row.done{background:rgba(126,231,135,.09);border-color:rgba(126,231,135,.32);opacity:.72;}
+  .st-chk{width:30px;height:30px;flex:none;border-radius:9px;border:2px solid #3f5447;display:grid;place-items:center;background:#0a0f0c;transition:.15s;}
+  .st-row.done .st-chk{background:var(--lime);border-color:var(--lime);}
+  .st-row.done .st-chk::after{content:"✓";color:#0a0f0c;font-weight:900;font-size:18px;}
+  .st-emoji{font-size:24px;flex:none;}
+  .st-name{flex:1;font-size:17px;font-weight:700;line-height:1.25;}
+  .st-name small{display:block;font-size:12.5px;color:var(--mut);font-weight:500;margin-top:3px;}
+  .st-qty{font-size:16px;font-weight:800;color:var(--lime);white-space:nowrap;text-align:right;}
+  .st-qty small{display:block;color:var(--gold);font-size:12px;font-weight:700;margin-top:1px;}
+  .st-empty{text-align:center;color:var(--mut);padding:60px 20px;}
+  .st-empty .e{font-size:46px;}
 </style>
 </head>
 <body>
@@ -229,7 +287,8 @@
 
   <div class="pane" id="pane-list">
     <div class="listbar">
-      <button class="btn primary" onclick="showQR()">📷 Scan to phone</button>
+      <button class="btn primary" onclick="openStore()">📱 iPhone Checklist</button>
+      <button class="btn" onclick="showQR()">📷 QR</button>
       <button class="btn" onclick="shareList()" id="shareBtn">📲 Share</button>
       <button class="btn" onclick="exportImage()">📸 Image</button>
       <button class="btn" onclick="emailList()">✉️ Email</button>
@@ -418,6 +477,22 @@
 </div>
 
 <div id="toast"></div>
+<div id="storeModal">
+  <div class="st-head">
+    <div class="st-top">
+      <div class="st-title">🛒 Shopping List<small id="stSub"></small></div>
+      <button class="st-close" onclick="closeStore()">✕</button>
+    </div>
+    <div class="st-prog" id="stProg"></div>
+    <div class="st-bar"><div class="st-bar-fill" id="stBar"></div></div>
+    <div class="st-filters">
+      <button class="fchip" id="stfAll" onclick="setStoreFilter('all')">All</button>
+      <button class="fchip" id="stfNeed" onclick="setStoreFilter('need')">🛒 Still need</button>
+      <button class="fchip" id="stfGot" onclick="setStoreFilter('got')">✓ Got it</button>
+    </div>
+  </div>
+  <div class="st-body" id="stBody"></div>
+</div>
 <div id="modal">
   <div class="mcard">
     <h3>📸 Your shopping list</h3>
@@ -764,6 +839,62 @@ function refreshList(){
 }
 function setFilter(f){S.listFilter=f;save();refreshList();}
 function toggleCheck(lk){S.checked[lk]=!S.checked[lk];markChanged();refreshList();}
+
+/* ===== iPhone Checklist (full-screen store mode) ===== */
+let storeFilter='all';
+function openStore(){
+  if(!listCount())return toast('Build your list first');
+  document.getElementById('storeModal').classList.add('show');
+  document.body.style.overflow='hidden';
+  renderStore();
+}
+function closeStore(){
+  document.getElementById('storeModal').classList.remove('show');
+  document.body.style.overflow='';
+}
+function setStoreFilter(f){storeFilter=f;renderStore();}
+function toggleStoreCheck(id){S.checked[id]=!S.checked[id];markChanged();renderStore();refreshList();}
+function renderStore(){
+  const need=computeList();
+  const ids=Object.keys(need).filter(id=>ING[id].price>0);  // only things to actually grab
+  const got=ids.filter(id=>S.checked[id]).length;
+  const left=ids.length-got;
+  const costLeft=ids.filter(id=>!S.checked[id]).reduce((s,id)=>s+pkgsNeeded(id,need[id].qty)*ING[id].price,0);
+  const pct=ids.length?Math.round(got/ids.length*100):0;
+  const selR=RECIPES.filter(r=>S.selRecipes[r.id]);
+  const sm=selR.reduce((s,r)=>s+(S.servings[r.id]||1),0);
+  document.getElementById('stSub').textContent=`${sm} smoothie${sm===1?'':'s'} · Loblaws`;
+  document.getElementById('stProg').innerHTML=`<b>${got}</b> in cart · <b>${left}</b> to grab · <b class="gold">${money(costLeft)}</b> left`;
+  document.getElementById('stBar').style.width=pct+'%';
+  document.getElementById('stfAll').className='fchip'+(storeFilter==='all'?' on':'');
+  document.getElementById('stfNeed').className='fchip'+(storeFilter==='need'?' on':'');
+  document.getElementById('stfGot').className='fchip'+(storeFilter==='got'?' on':'');
+
+  let html='',shown=0;
+  GROUPS.forEach(g=>{
+    let gids=ids.filter(id=>ING[id].group===g.k).filter(id=>{
+      if(storeFilter==='need')return !S.checked[id];
+      if(storeFilter==='got')return S.checked[id];
+      return true;
+    });
+    if(!gids.length)return;
+    html+=`<div class="st-group">${g.t}</div>`;
+    gids.forEach(id=>{
+      shown++;
+      const it=ING[id],info=need[id],done=S.checked[id];
+      const pk=pkgsNeeded(id,info.qty);
+      const buy=it.unit==='count'?`Buy ${pk}`:`Buy ${pk} ${pk>1?'pkgs':'pkg'}`;
+      html+=`<div class="st-row ${done?'done':''}" onclick="toggleStoreCheck('${id}')">
+        <div class="st-chk"></div>
+        <div class="st-emoji">${it.e}</div>
+        <div class="st-name">${it.product}<small>${it.pkg}</small></div>
+        <div class="st-qty">${buy}<small>~${money(pk*it.price)}</small></div>
+      </div>`;
+    });
+  });
+  if(!shown)html=`<div class="st-empty"><div class="e">${storeFilter==='need'?'🎉':'🛒'}</div><p style="margin-top:10px">${storeFilter==='need'?'All grabbed — nice work!':'Nothing here.'}</p></div>`;
+  document.getElementById('stBody').innerHTML=html;
+}
 function clearList(){
   S.selRecipes={};S.manual={};S.checked={};markChanged();
   renderRecipes();renderIngredients();refreshList();toast('List cleared');
