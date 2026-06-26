@@ -23,6 +23,10 @@
   .wrap{max-width:1040px;margin:0 auto;padding:0 18px;}
 
   header{padding:36px 0 22px;border-bottom:1px solid var(--line);}
+  .head-row{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;}
+  .clearall{flex:none;background:var(--card2);border:1px solid var(--line);color:var(--mut);font-weight:700;padding:11px 16px;border-radius:11px;cursor:pointer;transition:.15s;}
+  .clearall:hover{border-color:var(--red);color:var(--red);}
+  .exportbox .syncrow .btn{flex:1 1 auto;}
   .eyebrow{color:var(--lime);font-size:12px;letter-spacing:.22em;text-transform:uppercase;font-weight:700;margin-bottom:10px;}
   h1{font-size:clamp(28px,5vw,44px);font-weight:800;letter-spacing:-.02em;line-height:1.05;
      background:linear-gradient(90deg,#fff,var(--lime));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
@@ -298,7 +302,10 @@
 <div class="wrap">
 
   <header>
-    <h1>Smoothie Builder &amp; Shopping List</h1>
+    <div class="head-row">
+      <h1>Smoothie Builder &amp; Shopping List</h1>
+      <button class="btn clearall" onclick="clearList()">↺ Clear all</button>
+    </div>
     <p class="sub">Pick recipes, set how many smoothies you want, and the shopping list <b>scales the ingredients automatically</b> — then send it to your phone to tick off as you shop. Every ingredient explains <b>why it's in the cart</b>.</p>
     <div class="legend">
       <span class="tag t-inflam" onclick="jumpToRecipe('daily')" title="Jump to the best anti-inflammatory smoothie">Anti-inflammatory</span>
@@ -310,31 +317,37 @@
 
   <div class="tabs">
     <div class="tab active" data-pane="recipes">🧪 Recipes</div>
-    <div class="tab" data-pane="ingredients">🥗 Ingredients</div>
     <div class="tab" data-pane="list">🛒 My List <span class="badge" id="listBadge">0</span></div>
+    <div class="tab" data-pane="ingredients">🥗 Ingredients</div>
     <div class="tab" data-pane="how">📖 How It Works</div>
   </div>
 
   <div class="pane active" id="pane-recipes">
-    <p class="sub" style="margin:0 0 4px;">Tap <b>＋ / −</b> to set how many smoothies, then <b>Add to list</b>. Each recipe makes <b>one ~16 oz smoothie per serving</b>.</p>
+    <p class="sub" style="margin:0 0 14px;">Tap <b>＋ / −</b> to set how many smoothies, then <b>Add to list</b>. Each recipe makes <b>one ~16 oz smoothie per serving</b>.</p>
+    <div class="syncwrap exportbox">
+      <div class="synchead">📤 Export / Share Recipes</div>
+      <p class="syncp">Shares the recipes you've <b>added to your list</b> — names, ingredients, servings &amp; method.</p>
+      <div class="syncrow">
+        <button class="btn primary" onclick="shareRecipes()">📲 Share</button>
+        <button class="btn" onclick="exportRecipeImage()">📸 Image</button>
+        <button class="btn" onclick="emailRecipes()">✉️ Email</button>
+      </div>
+    </div>
     <div id="recipeList"></div>
   </div>
 
   <div class="pane" id="pane-ingredients"></div>
 
   <div class="pane" id="pane-list">
-    <div class="listbar">
-      <button class="btn primary" onclick="openStore()">📱 iPhone Checklist</button>
-      <button class="btn" onclick="showQR()">📷 QR</button>
-      <button class="btn" onclick="shareList()" id="shareBtn">📲 Share</button>
-      <button class="btn" onclick="exportImage()">📸 Image</button>
-      <button class="btn" onclick="emailList()">✉️ Email</button>
-      <button class="btn" onclick="smsList()">💬 Text</button>
-      <button class="btn" onclick="copyText()">📋 Copy</button>
-      <button class="btn" onclick="downloadTxt()">💾 .txt</button>
-      <button class="btn" onclick="clearList()">↺ Clear</button>
+    <div class="syncwrap exportbox">
+      <div class="synchead">📤 Export / Share Options</div>
+      <p class="syncp">Send your shopping list to your phone or anyone — opens your device's share sheet.</p>
+      <div class="syncrow">
+        <button class="btn primary" onclick="shareList()" id="shareBtn">📲 Share</button>
+        <button class="btn" onclick="exportImage()">📸 Image</button>
+        <button class="btn" onclick="emailList()">✉️ Email</button>
+      </div>
     </div>
-    <div id="syncPanel" class="syncwrap"></div>
     <div id="listBody"></div>
     <div class="histwrap">
       <div class="histhead">🕘 Export history <button class="btn" style="padding:5px 10px;font-size:12px;" onclick="clearHistory()">Clear</button></div>
@@ -1480,6 +1493,82 @@ function redownload(i){
 function clearHistory(){S.history=[];save();renderHistory();toast('History cleared');}
 function closeModal(){document.getElementById('modal').classList.remove('show');}
 document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal();});
+
+/* ============ RECIPE EXPORT / SHARE (only recipes added to the list) ============ */
+function selectedRecipes(){return RECIPES.filter(r=>S.selRecipes[r.id]);}
+function buildRecipeText(){
+  const rs=selectedRecipes();
+  let t='🥤 MY SMOOTHIE RECIPES\n\n';
+  rs.forEach(r=>{
+    const n=S.servings[r.id]||1;
+    t+=`▸ ${r.name}  (×${n})\n   For: ${r.for} · ${r.makes}\n`;
+    r.items.forEach(([id,q])=>{const tot=q*n;const ing=ING[id];t+=`     • ${(qtyDisplay(id,tot)+' '+unitLabel(ing.unit,tot)).trim()}  ${ing.n}\n`;});
+    t+='\n';
+  });
+  t+='Method: liquid first → frozen fruit → greens → powders & seeds. Blend 45–60s.\n';
+  return t;
+}
+function makeRecipeCanvas(){
+  const rs=selectedRecipes();
+  if(!rs.length)return null;
+  const scale=Math.max(3,(window.devicePixelRatio||1)*2),W=720,pad=44,lh=26,rgap=20;
+  let h=pad+120; rs.forEach(r=>{h+=28+r.items.length*lh+rgap;}); h+=70;
+  const cv=document.createElement('canvas');cv.width=W*scale;cv.height=h*scale;
+  const x=cv.getContext('2d');x.scale(scale,scale);
+  x.fillStyle='#0d120f';x.fillRect(0,0,W,h);
+  const g=x.createLinearGradient(0,0,W,0);g.addColorStop(0,'#4fc96a');g.addColorStop(1,'#7ee787');x.fillStyle=g;x.fillRect(0,0,W,8);
+  let y=pad+24;x.textBaseline='alphabetic';
+  x.fillStyle='#7ee787';x.font='700 15px -apple-system,Segoe UI,Arial';x.fillText('🥤  MY SMOOTHIE RECIPES',pad,y);y+=40;
+  x.fillStyle='#fff';x.font='800 30px -apple-system,Segoe UI,Arial';x.fillText('Recipes',pad,y);y+=18;
+  x.strokeStyle='#243329';x.lineWidth=1;x.beginPath();x.moveTo(pad,y);x.lineTo(W-pad,y);x.stroke();y+=30;
+  rs.forEach(r=>{
+    const n=S.servings[r.id]||1;
+    x.fillStyle='#f3f9f5';x.font='800 19px -apple-system,Segoe UI,Arial';x.fillText(`${r.name}  ×${n}`,pad,y);
+    x.fillStyle='#7ee787';x.font='600 13px -apple-system,Segoe UI,Arial';x.textAlign='right';x.fillText('for '+r.for,W-pad,y);x.textAlign='left';y+=26;
+    x.fillStyle='#b3ccbd';x.font='400 14px -apple-system,Segoe UI,Arial';
+    r.items.forEach(([id,q])=>{const tot=q*n;const ing=ING[id];x.fillText('•  '+(qtyDisplay(id,tot)+' '+unitLabel(ing.unit,tot)).trim()+'  '+ing.n,pad+6,y);y+=lh;});
+    y+=rgap;
+  });
+  x.strokeStyle='#243329';x.beginPath();x.moveTo(pad,y);x.lineTo(W-pad,y);x.stroke();y+=26;
+  x.fillStyle='#56d4c4';x.font='400 13px -apple-system,Segoe UI,Arial';x.fillText('Blend liquid → frozen fruit → greens → powders/seeds, 45–60s.',pad,y);
+  return cv;
+}
+function exportRecipeImage(){
+  const cv=makeRecipeCanvas();
+  if(!cv)return toast('Add recipes to your list first');
+  lastDataUrl=cv.toDataURL('image/png');
+  document.getElementById('previewImg').src=lastDataUrl;
+  document.getElementById('modal').classList.add('show');
+}
+async function shareRecipes(){
+  if(!selectedRecipes().length)return toast('Add recipes to your list first');
+  const text=buildRecipeText();
+  try{
+    const cv=makeRecipeCanvas();
+    if(cv && navigator.canShare){
+      const blob=await canvasToBlob(cv);
+      const file=new File([blob],`My-Smoothie-Recipes-${stamp()}.png`,{type:'image/png'});
+      if(navigator.canShare({files:[file]})){ await navigator.share({title:'My Smoothie Recipes',text:'My smoothie recipes 🥤',files:[file]}); return; }
+    }
+  }catch(e){if(e&&e.name==='AbortError')return;}
+  if(navigator.share){ try{await navigator.share({title:'My Smoothie Recipes',text});return;}catch(e){if(e&&e.name==='AbortError')return;} }
+  navigator.clipboard.writeText(text).then(()=>toast('Copied — open on your phone to Share')).catch(()=>toast('Copy failed'));
+}
+function emailRecipes(){
+  if(!selectedRecipes().length)return toast('Add recipes to your list first');
+  const cv=makeRecipeCanvas(); if(cv) lastDataUrl=cv.toDataURL('image/png');
+  const body='My smoothie recipes 🥤\n\n'+buildRecipeText();
+  const isMobile=/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  if(isMobile && navigator.canShare && cv){
+    canvasToBlob(cv).then(blob=>{
+      const file=new File([blob],`My-Smoothie-Recipes-${stamp()}.png`,{type:'image/png'});
+      if(navigator.canShare({files:[file]})){ navigator.share({title:'My Smoothie Recipes',text:body,files:[file]}).catch(()=>{}); }
+      else emailEml(body);
+    });
+    return;
+  }
+  emailEml(body);
+}
 
 /* ============ MISC ============ */
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1600);}
