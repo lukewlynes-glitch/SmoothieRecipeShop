@@ -423,6 +423,21 @@
     </div>
 
     <div class="info">
+      <h3>🧪 Booster add-ins — worth it vs. overkill</h3>
+      <p>Powders are <b>insurance &amp; convenience, not magic</b>. Stack six and you get an expensive, muddy smoothie with steep diminishing returns. Whole foods first; then pick <b>1–2 that match your #1 goal</b>. Graded by evidence + value:</p>
+      <ul class="ringred" style="grid-template-columns:1fr;gap:11px;margin-top:12px;">
+        <li><b style="color:var(--lime)">✅ Psyllium husk — WORTH IT.</b> Gel-forming fiber that physically fills your stomach; RCTs show real fullness plus lower LDL &amp; blood sugar. Cheap. (Note: helps you eat less — doesn't directly burn fat.) <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10389520/" target="_blank">[meta]</a></li>
+        <li><b style="color:var(--lime)">✅ Creatine — WORTH IT (best value).</b> The most-proven supplement: muscle + strength, and now memory/processing speed. ~$0.25/serving, tasteless — ideal for your lifting + cycling. <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11547435/" target="_blank">[strength]</a> <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11275561/" target="_blank">[brain]</a></li>
+        <li><b style="color:var(--amber)">🟡 MCT oil — SITUATIONAL.</b> Clean energy + modestly cuts next-meal intake, but cramps/diarrhea above ~15–30g. Start at 1 tsp. <a href="https://pubmed.ncbi.nlm.nih.gov/32212947/" target="_blank">[review]</a></li>
+        <li><b style="color:var(--amber)">🟡 Ashwagandha — SITUATIONAL.</b> Genuinely lowers cortisol/stress in trials — worth it only if stress/sleep is your issue, not fat loss. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12242034/" target="_blank">[meta]</a></li>
+        <li><b style="color:var(--amber)">🟡 Beetroot powder — SITUATIONAL/REDUNDANT.</b> Same nitrate win as the whole beets already in Pre-Ride Rocket, just pricier per dose. Handy for race-day precision.</li>
+        <li><b style="color:var(--red)">❌ Lion's mane — SKIP (hype).</b> Human evidence is weak/mixed in healthy adults (one trial showed worse recall); only promising in mild cognitive impairment. Pricey. <a href="https://www.ons.org/publications-research/voice/news-views/11-2024/what-evidence-says-about-lions-mane-mushroom" target="_blank">[review]</a></li>
+        <li><b style="color:var(--red)">❌ Greens / spirulina powders — SKIP.</b> Thin evidence for the blends, expensive, and repeated heavy-metal contamination findings. Your real spinach/kale beats them.</li>
+      </ul>
+      <div class="verdict">🎯 <b>My pick for you:</b> creatine + psyllium (~$0.40/day, both rock-solid). Add MCT or ashwagandha only if energy or stress is a specific goal. Everything else = optional flair.</div>
+    </div>
+
+    <div class="info">
       <h3>📱 Getting this on your phone — your options</h3>
       <p>You're viewing this as a <b>local file on your PC</b>, which is exactly why Email/Text felt broken: those buttons hand off to your computer's mail/SMS app, and if none is set up, nothing happens. So I added a route that works <b>right now, desktop→phone, with zero setup</b>:</p>
       <div class="vs" style="grid-template-columns:1fr;">
@@ -625,9 +640,20 @@ const ING={
     why:'Protein + healthy fat + that classic creamy flavour that makes a smoothie taste like a milkshake.',key:'Satiety + calories for muscle/recovery. Portion it — calorie-dense.',quality:'Ingredients should read "peanuts" (+ maybe salt). No added sugar or palm oil.',tags:['fat','nutri']},
   cucumber:{e:'🥒',n:'Cucumber',product:'English cucumber (loose)',pkg:'each (~$1.50, ~2 smoothies)',price:1.50,perPkg:2,unit:'cup',group:'greens',accent:'#6ee3d3',
     why:'Hydrating, near-zero calories, and a mild flavour that lightens a smoothie and helps you debloat.',key:'Hydration + debloat for almost no calories.',quality:'English/seedless blends smoothest; organic skips the wax coating.',tags:['fat','nutri']},
+  psyllium:{e:'🌾',n:'Psyllium husk',product:'Psyllium Husk (Metamucil unflavoured / bulk)',pkg:'~300 g tub (lasts ~2 mo)',price:9.99,perPkg:50,unit:'tsp',group:'booster',accent:'#7ee787',
+    why:'A gel-forming soluble fiber that swells in liquid to physically fill your stomach — RCTs show real boosts in fullness, plus lower LDL cholesterol and blood sugar.',key:'1 tsp for serious, long-lasting fullness. Drink water with it.',quality:'✅ WORTH IT — cheap, strong evidence for satiety + cholesterol + blood sugar. (Doesn\'t directly burn fat — helps you eat less.) Start with ½ tsp.',tags:['fat','nutri']},
+  creatine:{e:'💪',n:'Creatine monohydrate',product:'Creatine Monohydrate (plain, micronized)',pkg:'~500 g tub (~100 servings)',price:24.99,perPkg:100,unit:'tsp',group:'booster',accent:'#56d4c4',
+    why:'The most-researched supplement that exists: builds muscle + strength with training, and now shows real benefits for memory & processing speed. Tasteless, dissolves in.',key:'5g (1 tsp) daily — timing doesn\'t matter, consistency does.',quality:'✅ WORTH IT — best value here (~$0.25/serving). Perfect for your lifting + cycling. Plain monohydrate only; skip fancy "HCl/buffered" versions.',tags:['nutri','fat']},
+  mct:{e:'🥥',n:'MCT oil',product:'MCT Oil (C8/C10, from coconut)',pkg:'~500 mL bottle',price:16.99,perPkg:30,unit:'tbsp',group:'booster',accent:'#ffb454',
+    why:'Fast-absorbed fats that give clean energy and modestly cut how much you eat at the next meal.',key:'Start at 1 tsp — too much (15–30g+) causes cramps/diarrhea.',quality:'🟡 SITUATIONAL — useful for energy / lower-carb days, but GI side effects if you overdo it. Pricier. Ramp up slowly.',tags:['fat']},
+  ashwagandha:{e:'🌿',n:'Ashwagandha',product:'Ashwagandha Root Extract (KSM-66)',pkg:'~200 g powder · or capsules',price:19.99,perPkg:60,unit:'tsp',group:'booster',accent:'#c678dd',
+    why:'An adaptogen with solid trial evidence for lowering cortisol and perceived stress, and helping sleep.',key:'Daily, consistently — earthy taste, hide it behind cacao/banana.',quality:'🟡 SITUATIONAL — worth it only if stress or sleep is your issue (not for fat loss). Well-tolerated in studies.',tags:['inflam','nutri']},
+  beetpowder:{e:'🫛',n:'Beetroot powder',product:'Beetroot Powder (nitrate-rich)',pkg:'~250 g tub',price:19.99,perPkg:40,unit:'tsp',group:'booster',accent:'#ff8b82',
+    why:'Concentrated beet nitrates for endurance + blood flow — the convenient, no-fridge version of the beets already in your performance recipes.',key:'~2 tsp pre-ride. A scoopable alternative to fresh/juiced beets.',quality:'🟡 SITUATIONAL — same benefit as the whole beets in Pre-Ride Rocket, just pricier per dose. Handy for precise race-day loading.',tags:['bike','nutri']},
 };
 const GROUPS=[{k:'base',t:'Base · liquid + protein'},{k:'greens',t:'Greens'},{k:'fruit',t:'Fruit'},
-  {k:'power',t:'Anti-Inflammatory Power Players'},{k:'boost',t:'Seeds, Fats & Boosters'},{k:'have',t:'Already in your kitchen'}];
+  {k:'power',t:'Anti-Inflammatory Power Players'},{k:'boost',t:'Seeds, Fats & Boosters'},
+  {k:'booster',t:'Optional Boosters · sprinkle-ins (add to taste)'},{k:'have',t:'Already in your kitchen'}];
 
 /* ============ RECIPES (qty per 1 smoothie) ============ */
 const RECIPES=[
