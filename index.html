@@ -22,28 +22,33 @@
     -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;}
   .wrap{max-width:1040px;margin:0 auto;padding:0 18px;}
 
-  header{padding:36px 0 20px;border-bottom:1px solid var(--line);margin-bottom:8px;}
+  header{padding:8px 0 20px;border-bottom:1px solid var(--line);margin-bottom:8px;}
   .eyebrow{color:var(--lime);font-size:12px;letter-spacing:.22em;text-transform:uppercase;font-weight:700;margin-bottom:10px;}
   h1{font-size:clamp(28px,5vw,44px);font-weight:800;letter-spacing:-.02em;line-height:1.05;
      background:linear-gradient(90deg,#fff,var(--lime));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
   .sub{color:var(--mut);max-width:700px;margin-top:12px;font-size:15px;}
   .sub b{color:var(--txt);font-weight:600;}
-  .legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;}
-  .tag{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:4px 10px;border-radius:99px;border:1px solid transparent;}
+  /* benefit legend — big full-width rectangles, matching the recipe grid width */
+  .legend{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px;}
+  .tag{font-size:14px;font-weight:700;letter-spacing:.02em;padding:14px 12px;border-radius:12px;border:1px solid transparent;text-align:center;display:flex;align-items:center;justify-content:center;gap:8px;}
+  .tag::before{content:"";width:10px;height:10px;border-radius:50%;background:currentColor;flex:none;}
   .t-inflam{color:var(--berry);background:rgba(198,120,221,.12);border-color:rgba(198,120,221,.3);}
   .t-fat{color:var(--lime);background:rgba(126,231,135,.12);border-color:rgba(126,231,135,.3);}
   .t-nutri{color:var(--aqua);background:rgba(86,212,196,.12);border-color:rgba(86,212,196,.3);}
   .t-bike{color:var(--amber);background:rgba(255,180,84,.12);border-color:rgba(255,180,84,.3);}
+  @media(max-width:620px){.legend{grid-template-columns:repeat(2,1fr);}}
 
-  .tabs{display:flex;gap:8px;margin:16px 0 18px;flex-wrap:wrap;position:sticky;top:0;z-index:30;
-        background:linear-gradient(180deg,var(--bg) 72%,transparent);padding:12px 0;}
-  .tab{padding:10px 16px;border-radius:99px;border:1px solid var(--line);background:var(--card);
-       color:var(--mut);font-weight:600;font-size:14px;cursor:pointer;transition:.18s;position:relative;}
+  /* tabs — wide rectangles, top of page, sticky */
+  .tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0 18px;position:sticky;top:0;z-index:30;
+        background:linear-gradient(180deg,var(--bg) 78%,transparent);padding:12px 0;}
+  .tab{padding:15px 10px;border-radius:12px;border:1px solid var(--line);background:var(--card);
+       color:var(--mut);font-weight:700;font-size:15px;cursor:pointer;transition:.18s;position:relative;text-align:center;}
   .tab:hover{color:var(--txt);border-color:var(--lime2);}
-  .tab.active{background:var(--lime);color:#0a0f0c;border-color:var(--lime);}
+  .tab.active{background:var(--lime);color:#0a0f0c;border-color:var(--lime);box-shadow:0 6px 18px -6px rgba(95,217,122,.5);}
   .tab .badge{display:inline-block;min-width:18px;padding:0 5px;margin-left:6px;border-radius:99px;
               background:var(--berry);color:#0a0f0c;font-size:11px;font-weight:800;text-align:center;}
   .tab.active .badge{background:#0a0f0c;color:var(--lime);}
+  @media(max-width:620px){.tabs{grid-template-columns:repeat(2,1fr);}.tab{padding:13px 8px;font-size:14px;}}
 
   .section-title{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--mut);
                  margin:30px 0 14px;font-weight:700;display:flex;align-items:center;gap:10px;}
@@ -236,11 +241,9 @@
   /* ===== iPhone / small screens ===== */
   @media(max-width:600px){
     .wrap{padding:0 13px;}
-    header{padding:26px 0 16px;}
+    header{padding:4px 0 14px;}
     h1{font-size:29px;}
     .sub{font-size:14px;}
-    .tabs{gap:6px;padding:10px 0;}
-    .tab{padding:9px 12px;font-size:13px;}
     .grid{grid-template-columns:1fr;}
     .ringred{grid-template-columns:1fr;}
     .recipe,.ing,.info,.summary,.syncwrap,.histwrap{padding:16px;border-radius:14px;}
@@ -290,24 +293,23 @@
 <body>
 <div class="wrap">
 
-  <header>
-    <div class="eyebrow">🥤 Anti-Inflammatory · Fat Loss · Loblaws</div>
-    <h1>Smoothie Builder &amp; Shopping List</h1>
-    <p class="sub">Pick recipes, set how many smoothies you want, and the shopping list <b>scales the ingredients automatically</b> — then send it to your phone to tick off as you shop. Every ingredient explains <b>why it's in the cart</b>.</p>
-    <div class="legend">
-      <span class="tag t-inflam">● Anti-inflammatory</span>
-      <span class="tag t-fat">● Fat loss</span>
-      <span class="tag t-nutri">● Core nutrition</span>
-      <span class="tag t-bike">● Bike recovery</span>
-    </div>
-  </header>
-
   <div class="tabs">
     <div class="tab active" data-pane="recipes">🧪 Recipes</div>
     <div class="tab" data-pane="ingredients">🥗 Ingredients</div>
     <div class="tab" data-pane="list">🛒 My List <span class="badge" id="listBadge">0</span></div>
     <div class="tab" data-pane="how">📖 How It Works</div>
   </div>
+
+  <header>
+    <h1>Smoothie Builder &amp; Shopping List</h1>
+    <p class="sub">Pick recipes, set how many smoothies you want, and the shopping list <b>scales the ingredients automatically</b> — then send it to your phone to tick off as you shop. Every ingredient explains <b>why it's in the cart</b>.</p>
+    <div class="legend">
+      <span class="tag t-inflam">Anti-inflammatory</span>
+      <span class="tag t-fat">Fat loss</span>
+      <span class="tag t-nutri">Core nutrition</span>
+      <span class="tag t-bike">Bike recovery</span>
+    </div>
+  </header>
 
   <div class="pane active" id="pane-recipes">
     <p class="sub" style="margin:0 0 4px;">Tap <b>＋ / −</b> to set how many smoothies, then <b>Add to list</b>. Each recipe makes <b>one ~16 oz smoothie per serving</b>.</p>
