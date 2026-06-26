@@ -22,7 +22,7 @@
     -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;}
   .wrap{max-width:1040px;margin:0 auto;padding:0 18px;}
 
-  header{padding:8px 0 20px;border-bottom:1px solid var(--line);margin-bottom:8px;}
+  header{padding:36px 0 22px;}
   .eyebrow{color:var(--lime);font-size:12px;letter-spacing:.22em;text-transform:uppercase;font-weight:700;margin-bottom:10px;}
   h1{font-size:clamp(28px,5vw,44px);font-weight:800;letter-spacing:-.02em;line-height:1.05;
      background:linear-gradient(90deg,#fff,var(--lime));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
@@ -241,7 +241,7 @@
   /* ===== iPhone / small screens ===== */
   @media(max-width:600px){
     .wrap{padding:0 13px;}
-    header{padding:4px 0 14px;}
+    header{padding:24px 0 14px;}
     h1{font-size:29px;}
     .sub{font-size:14px;}
     .grid{grid-template-columns:1fr;}
@@ -293,13 +293,6 @@
 <body>
 <div class="wrap">
 
-  <div class="tabs">
-    <div class="tab active" data-pane="recipes">🧪 Recipes</div>
-    <div class="tab" data-pane="ingredients">🥗 Ingredients</div>
-    <div class="tab" data-pane="list">🛒 My List <span class="badge" id="listBadge">0</span></div>
-    <div class="tab" data-pane="how">📖 How It Works</div>
-  </div>
-
   <header>
     <h1>Smoothie Builder &amp; Shopping List</h1>
     <p class="sub">Pick recipes, set how many smoothies you want, and the shopping list <b>scales the ingredients automatically</b> — then send it to your phone to tick off as you shop. Every ingredient explains <b>why it's in the cart</b>.</p>
@@ -310,6 +303,13 @@
       <span class="tag t-bike">Bike recovery</span>
     </div>
   </header>
+
+  <div class="tabs">
+    <div class="tab active" data-pane="recipes">🧪 Recipes</div>
+    <div class="tab" data-pane="ingredients">🥗 Ingredients</div>
+    <div class="tab" data-pane="list">🛒 My List <span class="badge" id="listBadge">0</span></div>
+    <div class="tab" data-pane="how">📖 How It Works</div>
+  </div>
 
   <div class="pane active" id="pane-recipes">
     <p class="sub" style="margin:0 0 4px;">Tap <b>＋ / −</b> to set how many smoothies, then <b>Add to list</b>. Each recipe makes <b>one ~16 oz smoothie per serving</b>.</p>
