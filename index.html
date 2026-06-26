@@ -933,7 +933,8 @@ let S=JSON.parse(localStorage.getItem(KEY)||'{}');
 S.servings=S.servings||{};        // recipeId -> n
 S.selRecipes=S.selRecipes||{};    // recipeId -> true
 S.manual=S.manual||{};            // ingId -> true
-S.checked=S.checked||{};          // listKey -> true (crossed off)
+S.checked=S.checked||{};          // listKey -> true (crossed off / in cart)
+S.autoChk=S.autoChk||{};           // ids already auto-checked once (so re-renders respect manual unchecks)
 S.syncId=S.syncId||null;          // cloud sync blob id (links phone <-> dashboard)
 S.updatedAt=S.updatedAt||0;       // last local change time (for last-writer-wins)
 RECIPES.forEach(r=>{if(!S.servings[r.id])S.servings[r.id]=1;});
@@ -1079,8 +1080,28 @@ function toggleManual(id){
 }
 
 /* ============ RENDER: MY LIST ============ */
+// New buyable items default to CHECKED (in cart). Tracked in S.autoChk so a
+// manual uncheck sticks across re-renders; items dropped from the list are
+// untracked so they re-check if added again later.
+function reconcileAutoCheck(need){
+  S.autoChk=S.autoChk||{};
+  let changed=false; const present={};
+  Object.keys(need).forEach(id=>{
+    if(!ING[id]||ING[id].price<=0)return;   // "have it" staples aren't buyable rows
+    present[id]=true;
+    if(!S.autoChk[id]){                       // first time we've seen it → pre-check
+      S.autoChk[id]=true;
+      if(!S.checked[id]){S.checked[id]=true;changed=true;}
+    }
+  });
+  Object.keys(S.autoChk).forEach(id=>{
+    if(!present[id]){delete S.autoChk[id];if(S.checked[id]){delete S.checked[id];changed=true;}}
+  });
+  if(changed)markChanged();else save();
+}
 function refreshList(){
   const need=computeList();
+  reconcileAutoCheck(need);
   const ids=Object.keys(need);
   document.getElementById('listBadge').textContent=ids.length;
   const body=document.getElementById('listBody');
