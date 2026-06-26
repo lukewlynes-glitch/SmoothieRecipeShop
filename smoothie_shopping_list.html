@@ -197,6 +197,37 @@
   #previewImg{width:100%;border-radius:10px;border:1px solid var(--line);display:block;margin-bottom:14px;}
   .mrow{display:flex;gap:9px;flex-wrap:wrap;}.mrow .btn{flex:1;}
 
+  /* ===== recipe categories + purpose badges ===== */
+  .cat-head{display:flex;align-items:center;gap:12px;font-size:19px;font-weight:800;letter-spacing:-.01em;margin:34px 2px 14px;color:var(--txt);}
+  .cat-head:first-child{margin-top:6px;}
+  .cat-head .cat-ic{font-size:22px;}
+  .cat-head .cat-count{margin-left:auto;font-size:12px;font-weight:700;color:var(--mut);background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:99px;padding:3px 11px;}
+  .cat-grid{display:grid;grid-template-columns:1fr;gap:16px;}
+  @media(min-width:800px){.cat-grid{grid-template-columns:1fr 1fr;}}
+  .rtop{display:flex;align-items:flex-start;gap:10px;}
+  .recipe h3{flex:1;min-width:0;}
+  .rfor{display:flex;align-items:center;gap:9px;font-size:15.5px;color:var(--txt);font-weight:600;margin-top:8px;}
+  .rfor>span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--lime);font-weight:800;background:rgba(126,231,135,.13);border-radius:6px;padding:3px 8px;flex:none;}
+  .rbadges{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .rbadges .rwhen,.rbadges .rwl{margin-top:0;}
+
+  /* ===== softer, less-boxy surfaces (dark, more refined) ===== */
+  .recipe,.ing,.info,.summary,.items,.syncwrap,.histwrap,.mcard{
+    background:linear-gradient(180deg,#19241e 0%,#121b16 100%);
+    border:1px solid rgba(185,225,195,.10);
+    box-shadow:0 16px 38px -22px rgba(0,0,0,.85);
+    border-radius:18px;
+  }
+  .recipe{padding:22px;}
+  .recipe.sel{border-color:var(--lime);box-shadow:0 0 0 1px var(--lime) inset,0 18px 40px -20px rgba(95,217,122,.4);}
+  .ing{padding:20px;}
+  .ing:hover{transform:translateY(-3px);box-shadow:0 26px 46px -24px rgba(0,0,0,.9);border-color:rgba(141,242,152,.4);}
+  .key,.qpick,.ff{border:none;}
+  .key{background:rgba(255,255,255,.04);}
+  .stepper,.fchip,.syncjoin input,.synccode,.cbar,.chk{background:rgba(0,0,0,.25);}
+  .tab{background:rgba(255,255,255,.03);}
+  .method{opacity:.92;}
+
   /* ===== prevent any horizontal cut-off ===== */
   html,body{max-width:100%;overflow-x:hidden;}
   img,canvas{max-width:100%;}
@@ -576,13 +607,31 @@ const ING={
     why:'~25g protein per scoop. Backbone of a fat-loss smoothie: muscle protection + strongest satiety.',key:'Already in the kitchen — don\'t forget to scoop it.',quality:'Isolate = leaner; look for low added sugar (<2g) per scoop.',tags:['fat','nutri']},
   lemon:{e:'🍋',n:'Lemon',product:'Lemons (loose)',pkg:'each (~$0.79)',price:0.79,perPkg:1,unit:'count',group:'have',accent:'#8ba596',
     why:'Vitamin C brightens flavour, cuts bitter greens, and helps absorb the iron from spinach.',key:'Tiny effort, better taste + iron uptake.',quality:'Thick peel = low pesticide, so non-organic is fine.',tags:['nutri']},
+  collagen:{e:'🧬',n:'Collagen peptides',product:'Unflavoured Collagen Peptides (Vital Proteins / Webber)',pkg:'~500 g tub',price:24.99,perPkg:40,unit:'tbsp',group:'boost',accent:'#d68ce8',
+    why:'Dissolves clear & tasteless. Supplies the amino acids (glycine/proline) your body uses to rebuild skin, hair, nails and joint tissue.',key:'Skin/joint support — pair with vitamin C (citrus), which collagen-making depends on.',quality:'Unflavoured hydrolyzed / low-molecular-weight peptides absorb best. Evidence is promising but mixed — pairs well with a real vit-C source.',tags:['nutri']},
+  orange:{e:'🍊',n:'Orange',product:'Navel oranges (loose)',pkg:'each (~$0.80)',price:0.80,perPkg:1,unit:'count',group:'fruit',accent:'#ffc06b',
+    why:'A whole orange = vitamin C + fiber (skip the juice — that\'s just sugar). Vitamin C powers collagen synthesis and immune cells.',key:'Vitamin C for skin + immunity; sweetens naturally.',quality:'Whole fruit beats juice — keeps the fiber, gentler on blood sugar.',tags:['nutri','inflam']},
+  kiwi:{e:'🥝',n:'Kiwi',product:'Green kiwifruit (loose)',pkg:'each (~$0.50)',price:0.50,perPkg:1,unit:'count',group:'fruit',accent:'#8df298',
+    why:'More vitamin C than an orange, plus serotonin & antioxidants. RCTs found 2 kiwis an hour before bed improved sleep.',key:'Sleep + immunity + vitamin C. Eat skin-on for extra fiber.',quality:'Ripe = slightly soft to the squeeze. Organic if eating the skin.',tags:['nutri']},
+  walnuts:{e:'🌰',n:'Walnuts',product:'Walnut halves (PC)',pkg:'~400 g bag',price:7.99,perPkg:45,unit:'tbsp',group:'boost',accent:'#6ee3d3',
+    why:'The brain-food nut — the top plant source of omega-3 (ALA). Adds richness and healthy fat.',key:'Brain + heart omega-3s. A small spoonful per smoothie.',quality:'Raw, unsalted. Keep cold so the oils don\'t turn.',tags:['inflam','nutri']},
+  oats:{e:'🌾',n:'Rolled oats',product:'PC Large Flake Rolled Oats',pkg:'~1 kg bag',price:3.49,perPkg:120,unit:'tbsp',group:'boost',accent:'#ffc06b',
+    why:'Slow-release carbs + beta-glucan fiber for steady, lasting energy. Thickens the smoothie into a meal.',key:'Sustained energy + cholesterol-lowering fiber. Great pre-ride or for muscle.',quality:'Large-flake or steel-cut over instant — less processed, steadier blood sugar.',tags:['fat','nutri']},
+  pomegranate:{e:'🔴',n:'Pomegranate juice',product:'100% Pomegranate Juice (PC / PomeGreat)',pkg:'~1 L bottle',price:5.99,perPkg:4,unit:'cup',group:'fruit',accent:'#d68ce8',
+    why:'Among the most powerful polyphenol antioxidants — studied to protect both LDL and HDL cholesterol from oxidation.',key:'Heart + antioxidant powerhouse. A splash goes far (potent + naturally sugary).',quality:'"100% juice, not from concentrate," no added sugar.',tags:['inflam','nutri']},
+  kefir:{e:'🥛',n:'Plain kefir',product:'Plain Kefir (Liberté / PC)',pkg:'~1 L bottle',price:4.99,perPkg:4,unit:'cup',group:'base',accent:'#8df298',
+    why:'Fermented milk with far more probiotic strains than yogurt — trials show it eases bloating and diversifies gut bacteria.',key:'Gut health + protein. Use as the liquid base for digestion days.',quality:'Plain/unsweetened only — flavoured kefirs are sugar bombs.',tags:['nutri','inflam']},
+  peanutbutter:{e:'🥜',n:'Natural peanut butter',product:'Natural PB, no sugar added (PC)',pkg:'~1 kg jar',price:5.49,perPkg:60,unit:'tbsp',group:'boost',accent:'#ffc06b',
+    why:'Protein + healthy fat + that classic creamy flavour that makes a smoothie taste like a milkshake.',key:'Satiety + calories for muscle/recovery. Portion it — calorie-dense.',quality:'Ingredients should read "peanuts" (+ maybe salt). No added sugar or palm oil.',tags:['fat','nutri']},
+  cucumber:{e:'🥒',n:'Cucumber',product:'English cucumber (loose)',pkg:'each (~$1.50, ~2 smoothies)',price:1.50,perPkg:2,unit:'cup',group:'greens',accent:'#6ee3d3',
+    why:'Hydrating, near-zero calories, and a mild flavour that lightens a smoothie and helps you debloat.',key:'Hydration + debloat for almost no calories.',quality:'English/seedless blends smoothest; organic skips the wax coating.',tags:['fat','nutri']},
 };
 const GROUPS=[{k:'base',t:'Base · liquid + protein'},{k:'greens',t:'Greens'},{k:'fruit',t:'Fruit'},
   {k:'power',t:'Anti-Inflammatory Power Players'},{k:'boost',t:'Seeds, Fats & Boosters'},{k:'have',t:'Already in your kitchen'}];
 
 /* ============ RECIPES (qty per 1 smoothie) ============ */
 const RECIPES=[
-  {id:'daily',name:'The Daily Driver',pill:'Rest day',makes:'~16 oz · ~320 cal · ~28g protein',wl:3,wlTag:'Best for weight loss',
+  {id:'daily',name:'The Daily Driver',cat:'Everyday Essentials',for:'Everyday fuel + fullness',pill:'Rest day',makes:'~16 oz · ~320 cal · ~28g protein',wl:3,wlTag:'Best for weight loss',
    when:'Morning breakfast · or mid-afternoon on a rest day',whenIcon:'🌅',
    note:'Your default. Protein + fiber + fat with deep-pigment berries. Low sugar, high fullness.',
    bullets:[
@@ -593,7 +642,7 @@ const RECIPES=[
      ['🫚','Ginger','gentle anti-inflammatory that also settles the stomach.'],
    ],
    items:[['almondmilk',1],['blueberries',0.75],['spinach',2],['whey',1],['chia',1],['avocado',0.5],['ginger',1]]},
-  {id:'golden',name:'Golden Recovery',pill:'Bike day',makes:'~16 oz · ~420 cal · post-ride repair',wl:1,wlTag:'Bike days (higher carb)',
+  {id:'golden',name:'Golden Recovery',cat:'Performance & Recovery',for:'Post-ride repair + less soreness',pill:'Bike day',makes:'~16 oz · ~420 cal · post-ride repair',wl:1,wlTag:'Bike days (higher carb)',
    when:'Right after a ride · or the morning after a hard one',whenIcon:'🚴',
    note:'Cherry + turmeric calm inflammation; banana + coconut water refill glycogen. Pepper makes the turmeric count.',
    bullets:[
@@ -604,7 +653,7 @@ const RECIPES=[
      ['🟤','Cinnamon','steadies blood sugar after the banana\'s carb hit.'],
    ],
    items:[['coconutwater',1],['banana',0.5],['cherries',0.75],['turmeric',0.5],['pepper',1],['flax',1],['whey',1],['cinnamon',0.5]]},
-  {id:'green',name:'Green Machine',pill:'Detox-y',makes:'~16 oz · ~290 cal · max greens',wl:3,wlTag:'Great for weight loss',
+  {id:'green',name:'Green Machine',cat:'Everyday Essentials',for:'Max nutrients, fewest calories',pill:'Detox-y',makes:'~16 oz · ~290 cal · max greens',wl:3,wlTag:'Great for weight loss',
    when:'Midday lunch · or anytime you want something light',whenIcon:'☀️',
    note:'Lightest, most nutrient-dense option. Pineapple\'s bromelain + ginger do the anti-inflammatory work.',
    bullets:[
@@ -614,7 +663,7 @@ const RECIPES=[
      ['🍋','Lemon','vitamin C that also helps your body absorb the iron from the greens.'],
    ],
    items:[['almondmilk',1],['spinach',1],['kale',1],['pineapple',0.5],['avocado',0.5],['hemp',1],['ginger',1],['lemon',0.25]]},
-  {id:'choc',name:'Chocolate Antioxidant',pill:'Treat that works',makes:'~16 oz · ~340 cal · tastes like dessert',wl:2,wlTag:'Good — dessert swap',
+  {id:'choc',name:'Chocolate Antioxidant',cat:'Treats',for:'A dessert that loves you back',pill:'Treat that works',makes:'~16 oz · ~340 cal · tastes like dessert',wl:2,wlTag:'Good — dessert swap',
    when:'Evening dessert swap · or a post-workout treat',whenIcon:'🌙',
    note:'Cacao + berry flavanols stack two of the strongest anti-inflammatory compounds; protein keeps it a meal.',
    bullets:[
@@ -625,6 +674,115 @@ const RECIPES=[
      ['🥬','Hidden spinach','micronutrients you truly won\'t taste under the cocoa.'],
    ],
    items:[['almondmilk',1],['cacao',1],['mixedberries',0.75],['whey',1],['chia',1],['cinnamon',0.5],['spinach',1]]},
+
+  {id:'glow',name:'The Glow',cat:'Beauty & Glow',for:'Skin, hair & nails',pill:'Beauty',makes:'~16 oz · ~330 cal · collagen + vitamin C',wl:2,wlTag:'Good for weight loss',
+   when:'Morning · or anytime as a skin ritual',whenIcon:'✨',
+   note:'Built around the skin-building combo: vitamin C is required to make collagen, healthy fat keeps the skin barrier supple, and antioxidants fight the free radicals that age skin.',
+   bullets:[
+     ['🍊','Orange + 🍓 berries','vitamin C + antioxidants — vitamin C is the cofactor your body needs to actually build collagen.'],
+     ['🧬','Collagen peptides','supplies the glycine/proline building blocks for skin, hair & nails (works best paired with the vitamin C here).'],
+     ['🥑','Avocado','monounsaturated fat + vitamin E keep the skin barrier hydrated and plump.'],
+     ['🥬','Spinach','beta-carotene + folate for skin-cell turnover — you won\'t taste it.'],
+   ],
+   items:[['almondmilk',1],['mixedberries',0.75],['orange',1],['collagen',1],['avocado',0.5],['spinach',1]]},
+
+  {id:'sleep',name:'Deep Sleep',cat:'Sleep & Calm',for:'Better, deeper sleep',pill:'Evening',makes:'~16 oz · ~300 cal · wind-down',wl:2,wlTag:'Light evening option',
+   when:'1–2 hours before bed',whenIcon:'🌙',
+   note:'A bedtime blend of foods studied to help you fall asleep faster and sleep longer — naturally, no supplements.',
+   bullets:[
+     ['🍒','Tart cherries','one of the few natural food sources of melatonin — a study showed ~84 extra minutes of sleep.'],
+     ['🥝','Kiwi','RCTs found 2 kiwis an hour before bed meaningfully improved how fast people fell asleep and stayed asleep.'],
+     ['🍌','Banana','magnesium + potassium help muscles relax; pairs with oats for steady overnight blood sugar.'],
+     ['🟤','Cinnamon','cosy flavour with zero sugar so it won\'t spike you before bed.'],
+   ],
+   items:[['almondmilk',1],['cherries',0.75],['kiwi',1],['banana',0.5],['oats',2],['cinnamon',0.5]]},
+
+  {id:'brain',name:'Brain Fuel',cat:'Brain & Focus',for:'Focus, memory & blood flow',pill:'Focus',makes:'~16 oz · ~340 cal · cognition',wl:2,wlTag:'Good for weight loss',
+   when:'Morning · or before deep-focus work',whenIcon:'🧠',
+   note:'Stacks the ingredients with the best human evidence for blood flow to the brain and sharper thinking.',
+   bullets:[
+     ['🍫','Raw cacao','flavanols shown in RCTs to boost cerebral blood flow and improve attention & memory.'],
+     ['🫐','Wild blueberries','anthocyanins repeatedly linked to better memory and slower cognitive aging.'],
+     ['🌰','Walnuts','plant omega-3 (ALA) — the classic "brain food" fat.'],
+     ['🫛','Beets + 🍵 matcha','nitrates + a clean caffeine lift improve blood flow and alertness without a crash.'],
+   ],
+   items:[['almondmilk',1],['blueberries',0.75],['cacao',1],['walnuts',1],['beets',0.5],['matcha',0.5]]},
+
+  {id:'gut',name:'Gut Reset',cat:'Gut & Debloat',for:'Digestion & a calmer gut',pill:'Gut health',makes:'~16 oz · ~300 cal · probiotic',wl:2,wlTag:'Good for weight loss',
+   when:'Morning, on an empty stomach',whenIcon:'🦠',
+   note:'A probiotic + prebiotic + enzyme combo — feeds good gut bacteria and eases bloating (a calmer gut also lowers whole-body inflammation).',
+   bullets:[
+     ['🥛','Kefir','far more probiotic strains than yogurt — trials show less bloating and more diverse gut bacteria.'],
+     ['🍌','Banana','a prebiotic — the fiber that actually feeds the good bacteria the kefir delivers.'],
+     ['🍍','Pineapple','bromelain enzyme aids protein digestion and calms the gut.'],
+     ['🫚','Ginger','settles the stomach and speeds gastric emptying.'],
+   ],
+   items:[['kefir',1],['banana',0.5],['pineapple',0.5],['ginger',1],['chia',1]]},
+
+  {id:'debloat',name:'Lean & Light',cat:'Gut & Debloat',for:'Debloat & hydrate',pill:'Debloat',makes:'~16 oz · ~190 cal · the lightest',wl:3,wlTag:'Great for weight loss',
+   when:'Midday · or when you feel puffy',whenIcon:'💧',
+   note:'The lightest, most hydrating blend — cucumber + greens for volume with barely any calories, plus debloating enzymes and a gentle metabolism nudge.',
+   bullets:[
+     ['🥒','Cucumber','huge hydration + volume for almost zero calories — the debloat base.'],
+     ['🍍','Pineapple + 🫚 ginger','enzymes that ease bloating and aid digestion.'],
+     ['🍵','Matcha','catechins give a small, real nudge to fat oxidation + clean energy.'],
+     ['🍋','Lemon','brightens everything and adds vitamin C for pennies of calories.'],
+   ],
+   items:[['coconutwater',1],['cucumber',0.5],['pineapple',0.5],['spinach',1],['ginger',1],['matcha',0.5],['lemon',0.25]]},
+
+  {id:'heart',name:'Heart Smart',cat:'Heart & Hormones',for:'Cholesterol & circulation',pill:'Heart',makes:'~16 oz · ~330 cal · cardio-support',wl:2,wlTag:'Good for weight loss',
+   when:'Morning · or anytime',whenIcon:'❤️',
+   note:'Polyphenols + omega-3 + potassium — the nutrients with the strongest links to healthy cholesterol, blood pressure, and blood vessels.',
+   bullets:[
+     ['🔴','Pomegranate','potent polyphenols studied to protect both "good" and "bad" cholesterol from oxidation.'],
+     ['🟫','Ground flax','omega-3 + soluble fiber that help lower LDL cholesterol.'],
+     ['🍓','Berries + 🍫 cacao','flavanols that support blood-vessel flexibility and blood pressure.'],
+     ['🍌','Banana','potassium helps keep blood pressure in a healthy range.'],
+   ],
+   items:[['almondmilk',1],['pomegranate',0.5],['mixedberries',0.5],['flax',1],['cacao',1],['banana',0.5]]},
+
+  {id:'balance',name:"Women's Balance",cat:'Heart & Hormones',for:'Hormone support',pill:'Hormones',makes:'~16 oz · ~320 cal · lignan-rich',wl:2,wlTag:'Good for weight loss',
+   when:'Daily · consistency matters most',whenIcon:'⚖️',
+   note:'Centred on flax lignans — studied to gently support estrogen balance and ease perimenopausal symptoms — plus iron, calcium and protein.',
+   bullets:[
+     ['🟫','Ground flax','the richest food source of lignans (75–800× other foods); studied to ease perimenopausal symptoms.'],
+     ['🍓','Berries + 🥬 spinach','antioxidants, folate and iron — spinach iron absorbs better thanks to the berries\' vitamin C.'],
+     ['🍶','Greek yogurt','calcium + protein for bone strength and steady energy.'],
+     ['⚪','Chia','omega-3 + fiber for steady blood sugar and hormone-friendly fats.'],
+   ],
+   items:[['almondmilk',1],['flax',1],['mixedberries',0.75],['spinach',1],['yogurt',0.5],['chia',1]]},
+
+  {id:'preride',name:'Pre-Ride Rocket',cat:'Performance & Recovery',for:'Endurance & energy',pill:'Pre-workout',makes:'~16 oz · ~400 cal · carb + nitrate',wl:1,wlTag:'Bike/training days',
+   when:'45–60 min before a ride or workout',whenIcon:'⚡',
+   note:'Fast + slow carbs to top off your tank, plus nitrates studied to improve endurance and oxygen efficiency.',
+   bullets:[
+     ['🫛','Beets','dietary nitrates shown to boost endurance and time-to-exhaustion.'],
+     ['🍌','Banana + 🌾 oats','quick + slow carbs for sustained energy through the ride.'],
+     ['🥥','Coconut water','natural electrolytes to start the ride topped up.'],
+     ['🍵','Matcha','a clean caffeine lift for focus and output, no jitters.'],
+   ],
+   items:[['coconutwater',1],['beets',0.5],['banana',1],['oats',2],['matcha',0.5]]},
+
+  {id:'muscle',name:'Muscle Builder',cat:'Performance & Recovery',for:'Mass & strength',pill:'Post-lift',makes:'~16 oz · ~520 cal · high protein',wl:1,wlTag:'Bulk/lifting days',
+   when:'Within an hour of lifting',whenIcon:'💪',
+   note:'A higher-calorie, high-protein shake for building muscle — protein for repair, carbs to refuel, healthy fat for calories.',
+   bullets:[
+     ['🥄','Whey protein','~25g fast protein to kick-start muscle repair in the post-lift window.'],
+     ['🥜','Peanut butter','protein + calorie-dense healthy fat to hit a surplus.'],
+     ['🍌','Banana + 🌾 oats','carbs to refill glycogen and drive protein into muscle.'],
+     ['🍫','Cacao','flavour + antioxidants that double as recovery support.'],
+   ],
+   items:[['almondmilk',1],['whey',1],['peanutbutter',1],['banana',1],['oats',2],['cacao',1]]},
+
+  {id:'immunity',name:'Immunity Shield',cat:'Immunity',for:'Immune support',pill:'Immune',makes:'~16 oz · ~280 cal · vitamin C + zinc',wl:2,wlTag:'Good for weight loss',
+   when:'Daily in cold season · or at first sniffle',whenIcon:'🛡️',
+   note:'Loads up vitamin C plus the anti-inflammatory + gut-supporting ingredients your immune system leans on.',
+   bullets:[
+     ['🍊','Orange + 🥝 kiwi','a double hit of vitamin C — kiwi has even more than orange.'],
+     ['🫚','Ginger + 🟡 turmeric','anti-inflammatory bioactives (add ⚫ black pepper so the turmeric absorbs).'],
+     ['🍶','Greek yogurt','probiotics — ~70% of your immune system lives in your gut.'],
+   ],
+   items:[['orange',1],['kiwi',1],['yogurt',0.5],['ginger',1],['turmeric',0.5],['pepper',1],['almondmilk',1]]},
 ];
 
 /* ============ STATE ============ */
@@ -690,20 +848,22 @@ function pkgsNeeded(id,units){
 function money(n){return '$'+n.toFixed(2);}
 
 /* ============ RENDER: RECIPES ============ */
-function renderRecipes(){
-  document.getElementById('recipeList').innerHTML=RECIPES.map(r=>{
-    const n=S.servings[r.id], sel=S.selRecipes[r.id];
-    const items=r.items.map(([id,q])=>{
-      const tot=q*n; const ing=ING[id];
-      return `<li><span class="amt">${qtyDisplay(id,tot)} ${unitLabel(ing.unit,tot)}</span> ${ing.n}</li>`;
-    }).join('');
-    const bullets=(r.bullets||[]).map(b=>`<li><span class="be">${b[0]}</span><b>${b[1]}</b> — ${b[2]}</li>`).join('');
-    return `<div class="recipe ${sel?'sel':''}">
-      <div class="rtop">
-        <h3>${r.name} <span class="pill">${r.pill}</span></h3>
+const CAT_ORDER=['Everyday Essentials','Beauty & Glow','Brain & Focus','Sleep & Calm','Gut & Debloat','Heart & Hormones','Immunity','Performance & Recovery','Treats'];
+const CAT_ICON={'Everyday Essentials':'🌅','Beauty & Glow':'✨','Brain & Focus':'🧠','Sleep & Calm':'🌙','Gut & Debloat':'🦠','Heart & Hormones':'❤️','Immunity':'🛡️','Performance & Recovery':'🚴','Treats':'🍫'};
+function recipeCard(r){
+  const n=S.servings[r.id], sel=S.selRecipes[r.id];
+  const items=r.items.map(([id,q])=>{
+    const tot=q*n; const ing=ING[id];
+    return `<li><span class="amt">${qtyDisplay(id,tot)} ${unitLabel(ing.unit,tot)}</span> ${ing.n}</li>`;
+  }).join('');
+  const bullets=(r.bullets||[]).map(b=>`<li><span class="be">${b[0]}</span><b>${b[1]}</b> — ${b[2]}</li>`).join('');
+  return `<div class="recipe ${sel?'sel':''}">
+      <div class="rtop"><h3>${r.name}</h3><span class="pill">${r.pill}</span></div>
+      ${r.for?`<div class="rfor">${r.whenIcon||'🥤'} <span>For</span> ${r.for}</div>`:''}
+      <div class="rbadges">
+        <span class="rwhen">⏰ <span>Best time</span> ${r.when}</span>
+        <span class="rwl wl${r.wl}">${'●'.repeat(r.wl)}${'○'.repeat(3-r.wl)} <span>Weight loss</span> ${r.wlTag}</span>
       </div>
-      <div class="rwhen">${r.whenIcon} <span>Best time:</span> ${r.when}</div>
-      <div class="rwl wl${r.wl}">${'●'.repeat(r.wl)}${'○'.repeat(3-r.wl)} <span>Weight loss:</span> ${r.wlTag}</div>
       <div class="rmeta">Makes <b>${n} smoothie${n>1?'s':''}</b> · ${r.makes}</div>
       <ul class="ringred">${items}</ul>
       <div class="rcontrols">
@@ -714,14 +874,24 @@ function renderRecipes(){
         </div>
         <button class="addbtn ${sel?'on':''}" onclick="toggleRecipe('${r.id}')">${sel?'✓ Added to list':'＋ Add to list'}</button>
       </div>
-      <div class="rnote">
-        <b>Why this combo:</b> ${r.note}
-        <ul class="rbullets">${bullets}</ul>
-      </div>
+      <div class="rnote"><b>Why this combo:</b> ${r.note}<ul class="rbullets">${bullets}</ul></div>
     </div>`;
-  }).join('')+
-  `<div class="recipe" style="border-style:dashed"><h3>🥤 Method (all recipes)</h3>
-   <p class="why" style="margin-top:6px">Liquid first, then frozen fruit, greens, then powders &amp; seeds. Blend 45–60s. Too thick? splash of water. Too thin? more frozen fruit. For multiple smoothies, batch-blend then store extras in the fridge up to 24h (shake before drinking).</p></div>`;
+}
+function renderRecipes(){
+  let html='';
+  const seen=new Set();
+  CAT_ORDER.forEach(cat=>{
+    const rs=RECIPES.filter(r=>r.cat===cat);
+    if(!rs.length)return;
+    rs.forEach(r=>seen.add(r.id));
+    html+=`<div class="cat-head"><span class="cat-ic">${CAT_ICON[cat]||'🥤'}</span>${cat}<span class="cat-count">${rs.length}</span></div>`;
+    html+=`<div class="cat-grid">${rs.map(recipeCard).join('')}</div>`;
+  });
+  const rest=RECIPES.filter(r=>!seen.has(r.id));
+  if(rest.length)html+=`<div class="cat-grid">${rest.map(recipeCard).join('')}</div>`;
+  html+=`<div class="recipe method" style="margin-top:18px;"><h3>🥤 Method (all recipes)</h3>
+   <p class="why" style="margin-top:6px">Liquid first, then frozen fruit, greens, then powders &amp; seeds. Blend 45–60s. Too thick? splash of water. Too thin? more frozen fruit. Batch-blend extras &amp; fridge up to 24h (shake before drinking).</p></div>`;
+  document.getElementById('recipeList').innerHTML=html;
 }
 function bump(id,d){
   S.servings[id]=Math.max(1,Math.min(4,(S.servings[id]||1)+d));
