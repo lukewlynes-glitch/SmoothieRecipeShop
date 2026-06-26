@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="110" fill="#0d120f"/>
+  <rect width="512" height="512" rx="110" fill="url(#g)" opacity="0.12"/>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="512" y2="512">
+      <stop offset="0" stop-color="#4fc96a"/>
+      <stop offset="1" stop-color="#7ee787"/>
+    </linearGradient>
+    <linearGradient id="cup" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7ee787"/>
+      <stop offset="1" stop-color="#4fc96a"/>
+    </linearGradient>
+  </defs>
+  <!-- straw -->
+  <rect x="300" y="120" width="24" height="180" rx="12" fill="#56d4c4" transform="rotate(18 312 210)"/>
+  <!-- cup -->
+  <path d="M168 196 h176 l-22 210 a26 26 0 0 1 -26 23 h-80 a26 26 0 0 1 -26 -23 z" fill="url(#cup)"/>
+  <!-- smoothie surface -->
+  <ellipse cx="256" cy="200" rx="88" ry="20" fill="#c678dd"/>
+  <!-- bubbles -->
+  <circle cx="230" cy="196" r="7" fill="#0d120f" opacity="0.25"/>
+  <circle cx="270" cy="202" r="5" fill="#0d120f" opacity="0.25"/>
+  <!-- leaf -->
+  <path d="M256 150 C300 120 350 130 360 96 C320 96 280 110 256 150 Z" fill="#7ee787"/>
+</svg>

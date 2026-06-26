@@ -1,0 +1,19 @@
+{
+  "name": "Smoothie Builder and Shopping List",
+  "short_name": "Smoothies",
+  "description": "Build anti-inflammatory fat-loss smoothies, scale servings, and export a Loblaws shopping list.",
+  "start_url": "index.html",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#0d120f",
+  "theme_color": "#0d120f",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "smoothie_icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
