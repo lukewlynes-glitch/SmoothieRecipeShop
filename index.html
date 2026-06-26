@@ -385,6 +385,47 @@
   #updBanner .ub-txt{font-size:13.5px;font-weight:600;color:var(--txt);}
   #updBanner .ub-txt small{display:block;color:var(--mut);font-size:12px;font-weight:500;}
   #updBanner button{font-family:var(--font-body);white-space:nowrap;}
+
+  /* ===== Add Recipes tab ===== */
+  .ar-intro{color:var(--mut);font-size:14.5px;margin:2px 0 16px;}
+  .ar-phases{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px;}
+  @media(max-width:620px){.ar-phases{grid-template-columns:1fr;}}
+  .ar-phase{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:12px;padding:11px 13px;cursor:pointer;transition:.15s;}
+  .ar-phase:hover{border-color:var(--lime2);}
+  .ar-phase.on{background:var(--lime);color:#0a0f0c;border-color:var(--lime);}
+  .ar-phase b{display:block;font-size:14px;font-weight:800;}
+  .ar-phase small{font-size:11.5px;opacity:.8;}
+  .ar-sec{background:linear-gradient(180deg,#19241e 0%,#121b16 100%);border:1px solid rgba(185,225,195,.10);border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 16px 38px -22px rgba(0,0,0,.85);}
+  .ar-sec h3{font-family:var(--font-display);font-weight:600;font-size:18px;margin-bottom:4px;}
+  .ar-sec .hint{color:var(--mut);font-size:13px;margin-bottom:12px;}
+  .ar-field{margin-bottom:11px;}
+  .ar-field label{display:block;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--mut);margin-bottom:5px;}
+  .ar-input,.ar-area,.ar-sel{width:100%;background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:10px;color:var(--txt);padding:11px 12px;font-size:14px;font-family:var(--font-body);}
+  .ar-area{min-height:96px;resize:vertical;line-height:1.5;}
+  .ar-row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  @media(max-width:520px){.ar-row2{grid-template-columns:1fr;}}
+  .ar-ings{display:flex;flex-direction:column;gap:8px;margin-top:6px;}
+  .ar-ing{display:grid;grid-template-columns:48px 1fr 70px 86px 32px;gap:7px;align-items:center;}
+  @media(max-width:560px){.ar-ing{grid-template-columns:40px 1fr 56px 70px 30px;gap:5px;}}
+  .ar-ing input,.ar-ing select{background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:9px;color:var(--txt);padding:9px 8px;font-size:13px;font-family:var(--font-body);min-width:0;}
+  .ar-ing .ar-x{background:transparent;border:1px solid var(--line);color:var(--mut);border-radius:9px;height:36px;cursor:pointer;font-size:15px;}
+  .ar-ing .ar-x:hover{border-color:var(--red);color:var(--red);}
+  .ar-add-ing{margin-top:9px;font-size:13px;font-weight:700;color:var(--lime);background:transparent;border:1px dashed #3a4a40;border-radius:10px;padding:9px 13px;cursor:pointer;}
+  .ar-add-ing:hover{border-color:var(--lime);}
+  .ar-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px;}
+  .ar-busy{display:inline-block;font-size:13px;color:var(--amber);font-weight:600;margin-left:4px;}
+  .ar-mine{margin-top:6px;}
+  .ar-mine-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--line);}
+  .ar-mine-row .e{font-size:20px;}
+  .ar-mine-row .nm{flex:1;font-weight:700;}
+  .ar-mine-row .nm small{display:block;color:var(--mut);font-size:12px;font-weight:500;}
+  .ar-mine-row .ar-del{background:transparent;border:1px solid var(--line);color:var(--mut);border-radius:9px;padding:6px 11px;font-size:12px;font-weight:700;cursor:pointer;}
+  .ar-mine-row .ar-del:hover{border-color:var(--red);color:var(--red);}
+  .ar-key-note{font-size:12px;color:var(--mut);margin-top:8px;line-height:1.5;}
+  .ar-key-note b{color:var(--amber);}
+  .ar-dots{display:flex;gap:6px;}
+  .ar-dot{width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:rgba(0,0,0,.25);color:var(--mut);cursor:pointer;font-weight:800;}
+  .ar-dot.on{background:var(--lime);color:#0a0f0c;border-color:var(--lime);}
 </style>
 </head>
 <body>
@@ -408,7 +449,7 @@
     <div class="tab active" data-pane="recipes">🧪 Recipes</div>
     <div class="tab" data-pane="list">🛒 My List <span class="badge" id="listBadge">0</span></div>
     <div class="tab" data-pane="ingredients">🥗 Ingredients</div>
-    <div class="tab" data-pane="how">📖 How It Works</div>
+    <div class="tab" data-pane="add">➕ Add Recipes</div>
   </div>
 
   <div class="pane active" id="pane-recipes">
@@ -443,6 +484,8 @@
       <div id="histBody"></div>
     </div>
   </div>
+
+  <div class="pane" id="pane-add"></div>
 
   <div class="pane" id="pane-how">
     <div class="info">
@@ -626,7 +669,7 @@
   <div class="foot">
     <b>Not medical advice</b> — adjust to how your body &amp; weekly weigh-in actually respond. Product label verified June 2026 via PC public catalogue.
     <div class="footver">
-      <span id="appVer">v13</span>
+      <span id="appVer">v14</span>
       <button class="verbtn" onclick="checkForUpdate()">↻ Check for updates</button>
     </div>
   </div>
@@ -767,7 +810,8 @@ const ING={
 };
 const GROUPS=[{k:'base',t:'Base · liquid + protein'},{k:'greens',t:'Greens'},{k:'fruit',t:'Fruit'},
   {k:'power',t:'Anti-Inflammatory Power Players'},{k:'boost',t:'Seeds, Fats & Boosters'},
-  {k:'booster',t:'Optional Boosters · sprinkle-ins (add to taste)'},{k:'have',t:'Already in your kitchen'}];
+  {k:'booster',t:'Optional Boosters · sprinkle-ins (add to taste)'},{k:'have',t:'Already in your kitchen'},
+  {k:'myfinds',t:'⭐ From my recipes'}];
 
 /* ============ RECIPES (qty per 1 smoothie) ============ */
 const RECIPES=[
@@ -933,6 +977,8 @@ S.selRecipes=S.selRecipes||{};    // recipeId -> true
 S.manual=S.manual||{};            // ingId -> true
 S.checked=S.checked||{};          // listKey -> true (crossed off / in cart)
 S.autoChk=S.autoChk||{};           // ids already auto-checked once (so re-renders respect manual unchecks)
+S.customRecipes=S.customRecipes||[];   // user-added recipes (RECIPES-shaped, cat:'My finds')
+S.customIngredients=S.customIngredients||{}; // user-added ingredients (ING-shaped, group:'myfinds')
 S.syncId=S.syncId||null;          // cloud sync blob id (links phone <-> dashboard)
 S.updatedAt=S.updatedAt||0;       // last local change time (for last-writer-wins)
 RECIPES.forEach(r=>{if(!S.servings[r.id])S.servings[r.id]=1;});
@@ -989,8 +1035,8 @@ function pkgsNeeded(id,units){
 function money(n){return '$'+n.toFixed(2);}
 
 /* ============ RENDER: RECIPES ============ */
-const CAT_ORDER=['Everyday Essentials','Beauty & Glow','Brain & Focus','Sleep & Calm','Gut & Debloat','Heart & Hormones','Immunity','Performance & Recovery','Treats'];
-const CAT_ICON={'Everyday Essentials':'🌅','Beauty & Glow':'✨','Brain & Focus':'🧠','Sleep & Calm':'🌙','Gut & Debloat':'🦠','Heart & Hormones':'❤️','Immunity':'🛡️','Performance & Recovery':'🚴','Treats':'🍫'};
+const CAT_ORDER=['My finds','Everyday Essentials','Beauty & Glow','Brain & Focus','Sleep & Calm','Gut & Debloat','Heart & Hormones','Immunity','Performance & Recovery','Treats'];
+const CAT_ICON={'My finds':'⭐','Everyday Essentials':'🌅','Beauty & Glow':'✨','Brain & Focus':'🧠','Sleep & Calm':'🌙','Gut & Debloat':'🦠','Heart & Hormones':'❤️','Immunity':'🛡️','Performance & Recovery':'🚴','Treats':'🍫'};
 function recipeCard(r){
   const n=S.servings[r.id], sel=S.selRecipes[r.id];
   const items=r.items.map(([id,q])=>{
@@ -1139,7 +1185,7 @@ function refreshList(){
   let shown=0;
   GROUPS.forEach(g=>{
     let gids=ids.filter(id=>ING[id].group===g.k).filter(id=>{
-      const got=ING[id].price===0||S.checked[id];
+      const got=(ING[id].price===0&&!ING[id].custom)||S.checked[id];
       if(filter==='need')return !got;
       if(filter==='got')return got;
       return true;
@@ -1150,12 +1196,12 @@ function refreshList(){
       shown++;
       const it=ING[id], info=need[id];
       const lk=id; const done=S.checked[lk];
-      const have=it.price===0;
+      const have=it.price===0 && !it.custom;
       const pk=pkgsNeeded(id,info.qty);
       const cost=pk*it.price;
       const need_txt = info.qty>0 ? `needs ${qtyDisplay(id,info.qty)} ${unitLabel(it.unit,info.qty)}`.trim() : 'as needed';
-      const buyTxt = have?'Have it':(it.unit==='count'?`Buy ${pk}`:`Buy ${pk} ${pk>1?'pkgs':'pkg'}`);
-      const subTxt = have?'already stocked':`${need_txt} · <b>~${money(cost)}</b>`;
+      const buyTxt = have?'Have it':(it.custom?'Buy':(it.unit==='count'?`Buy ${pk}`:`Buy ${pk} ${pk>1?'pkgs':'pkg'}`));
+      const subTxt = have?'already stocked':(it.custom?`${need_txt} · price varies`:`${need_txt} · <b>~${money(cost)}</b>`);
       html+=`<div class="lrow ${done?'checked':''}" onclick="toggleCheck('${lk}')">
         <div class="chk ${done?'on':''}"></div>
         <div class="emoji">${it.e}</div>
@@ -1237,7 +1283,7 @@ function clearList(){
    pull on focus + a gentle interval while the tab is visible. Fails silently offline. */
 const SYNC_API='https://jsonblob.com/api/jsonBlob';
 let applyingRemote=false, pushTimer=null, pullTimer=null;
-function syncState(){return {servings:S.servings,selRecipes:S.selRecipes,manual:S.manual,checked:S.checked,updatedAt:S.updatedAt||0};}
+function syncState(){return {servings:S.servings,selRecipes:S.selRecipes,manual:S.manual,checked:S.checked,customRecipes:S.customRecipes,customIngredients:S.customIngredients,updatedAt:S.updatedAt||0};}
 function setSyncStatus(s){const d=document.getElementById('syncDot');if(d){d.className='syncdot '+s;d.title=s;}const t=document.getElementById('syncStatusTxt');if(t)t.textContent=s==='synced'?'Synced':s==='offline'?'Offline — will retry':'Syncing…';}
 function markChanged(){
   save();
@@ -1265,8 +1311,11 @@ async function syncPull(){
       S.selRecipes=remote.selRecipes||{};
       S.manual=remote.manual||{};
       S.checked=remote.checked||{};
+      if(remote.customRecipes)S.customRecipes=remote.customRecipes;
+      if(remote.customIngredients)S.customIngredients=remote.customIngredients;
       S.updatedAt=remote.updatedAt;save();
-      renderRecipes();renderIngredients();refreshList();
+      mergeCustom();
+      renderRecipes();renderIngredients();refreshList();if(typeof renderAdd==='function')renderAdd();
       applyingRemote=false;
     }
     setSyncStatus('synced');
@@ -1722,7 +1771,236 @@ function jumpToRecipe(id){
   }catch(e){}
 })();
 
-renderRecipes();renderIngredients();refreshList();renderHistory();
+/* ============ ADD RECIPES — Phases 1 (manual) · 2 (text/link AI) · 3 (image AI) ============ */
+const AR_KEY_LS='smoothie_api_key', AR_MODEL_LS='smoothie_model';
+const AR_UNITS=['cup','tbsp','tsp','count','scoop','handful','g','ml'];
+let arWl=2;
+function arEsc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function arGetKey(){return localStorage.getItem(AR_KEY_LS)||'';}
+function arGetModel(){return localStorage.getItem(AR_MODEL_LS)||'claude-opus-4-8';}
+
+/* merge user recipes/ingredients into the live RECIPES / ING so every existing
+   view (Recipes tab, shopping list, store mode, sync) picks them up for free */
+function mergeCustom(){
+  RECIPES.length=BASE_RECIPE_COUNT;
+  Object.keys(ING).forEach(k=>{ if(!BASE_ING_KEYS.includes(k)) delete ING[k]; });
+  Object.assign(ING, S.customIngredients||{});
+  (S.customRecipes||[]).forEach(r=>{ RECIPES.push(r); if(!S.servings[r.id])S.servings[r.id]=1; });
+}
+function arMatchExisting(name){
+  const q=(name||'').toLowerCase().trim(); if(!q)return null;
+  for(const k of BASE_ING_KEYS){ const n=(ING[k].n||'').toLowerCase();
+    if(n===q||n.includes(q)||q.includes(n))return k; }
+  return null;
+}
+
+/* ---- Claude call (direct from browser with the user's own key) ---- */
+async function arCallClaude(content){
+  const key=arGetKey();
+  if(!key)throw new Error('Add your Anthropic API key in Settings (below) first');
+  const r=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'content-type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({model:arGetModel(),max_tokens:2000,messages:[{role:'user',content}]})
+  });
+  if(!r.ok){let t='';try{t=await r.text();}catch(e){} throw new Error('API '+r.status+(t?': '+t.slice(0,150):''));}
+  const j=await r.json();
+  return (j.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('');
+}
+function arParseJSON(txt){
+  let s=(txt||'').trim().replace(/^```json/i,'').replace(/^```/,'').replace(/```$/,'').trim();
+  const a=s.indexOf('{'), b=s.lastIndexOf('}'); if(a>=0&&b>a)s=s.slice(a,b+1);
+  return JSON.parse(s);
+}
+const AR_SCHEMA='Return ONLY a JSON object (no prose, no markdown fences). Shape:\n{"name":string,"for":short phrase who/what it is for,"when":"best time to drink","wl":integer 1-3 (weight-loss friendliness, 3=best),"wlTag":short label,"note":"one sentence on why this combo works","ingredients":[{"emoji":"one emoji","name":string,"qty":number for ONE ~16oz smoothie,"unit":"cup|tbsp|tsp|count|scoop|handful|g|ml","why":"short reason it is included"}]}\nEstimate qty per single ~16oz smoothie. Only include blended ingredients.';
+
+function arBusy(id,on){const el=document.getElementById(id);if(!el)return;
+  if(on){el.dataset.lbl=el.textContent;el.textContent='⏳ Working…';el.disabled=true;}
+  else{el.textContent=el.dataset.lbl||el.textContent;el.disabled=false;}}
+
+async function arFromText(){
+  const t=((document.getElementById('arText')||{}).value||'');
+  if(!t.trim())return toast('Paste a recipe or caption first');
+  arBusy('arTextBtn',true);
+  try{ arFillForm(arParseJSON(await arCallClaude([{type:'text',text:AR_SCHEMA+'\n\nRecipe source:\n'+t}]))); toast('✨ Parsed — review & save below'); }
+  catch(e){toast(e.message);}
+  arBusy('arTextBtn',false);
+}
+async function arFromUrl(){
+  const u=(((document.getElementById('arUrl')||{}).value)||'').trim();
+  if(!u)return toast('Paste a recipe link first');
+  arBusy('arUrlBtn',true);
+  try{
+    let page=''; try{const rr=await fetch('https://r.jina.ai/'+u); page=await rr.text();}catch(e){}
+    if(!page||page.length<40)throw new Error('Could not read that page — paste the recipe text in the box above instead');
+    arFillForm(arParseJSON(await arCallClaude([{type:'text',text:AR_SCHEMA+'\n\nExtract the single main recipe from this web page:\n'+page.slice(0,12000)}])));
+    toast('✨ Imported — review & save below');
+  }catch(e){toast(e.message);}
+  arBusy('arUrlBtn',false);
+}
+function arFromImage(input){
+  const f=input.files&&input.files[0]; if(!f)return;
+  const rd=new FileReader();
+  rd.onload=async()=>{ arBusy('arImgBtn',true);
+    try{ const data=String(rd.result).split(',')[1];
+      arFillForm(arParseJSON(await arCallClaude([
+        {type:'image',source:{type:'base64',media_type:f.type||'image/jpeg',data}},
+        {type:'text',text:AR_SCHEMA+'\n\nExtract the recipe shown in this image.'}])));
+      toast('✨ Read image — review & save below');
+    }catch(e){toast(e.message);} arBusy('arImgBtn',false); input.value='';
+  };
+  rd.readAsDataURL(f);
+}
+
+/* ---- the review/edit form (Phase 1, also filled by Phase 2/3) ---- */
+function arSetWl(n){arWl=Math.max(1,Math.min(3,n||2));
+  document.querySelectorAll('#arDots .ar-dot').forEach(d=>d.classList.toggle('on',(+d.dataset.n)<=arWl));}
+function arAddIngRow(emoji,name,qty,unit,why){
+  const l=document.getElementById('arIngList'); if(!l)return;
+  const row=document.createElement('div'); row.className='ar-ing'; row.dataset.why=why||'';
+  row.innerHTML='<input class="ai-e" maxlength="3" placeholder="🥤" value="'+arEsc(emoji)+'">'
+    +'<input class="ai-n" placeholder="Ingredient" value="'+arEsc(name)+'">'
+    +'<input class="ai-q" type="number" step="0.25" min="0" placeholder="1" value="'+(qty!=null&&qty!==''?qty:'')+'">'
+    +'<select class="ai-u">'+AR_UNITS.map(u=>'<option '+(u===(unit||'cup')?'selected':'')+'>'+u+'</option>').join('')+'</select>'
+    +'<button class="ar-x" title="Remove">×</button>';
+  row.querySelector('.ar-x').onclick=()=>row.remove();
+  l.appendChild(row);
+}
+function arClearForm(){
+  ['arName','arFor','arWhen','arWlTag','arNote'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  arSetWl(2); const l=document.getElementById('arIngList'); if(l)l.innerHTML=''; arAddIngRow();
+}
+function arFillForm(o){
+  arClearForm();
+  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v||'';};
+  set('arName',o.name);set('arFor',o.for);set('arWhen',o.when);set('arWlTag',o.wlTag);set('arNote',o.note);
+  arSetWl(o.wl||2);
+  const l=document.getElementById('arIngList'); if(l)l.innerHTML='';
+  (o.ingredients||[]).forEach(i=>arAddIngRow(i.emoji,i.name,i.qty,i.unit,i.why));
+  if(!(o.ingredients||[]).length)arAddIngRow();
+  const sec=document.getElementById('arFormSec'); if(sec)sec.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function arReadForm(){
+  const g=id=>((document.getElementById(id)||{}).value||'').trim();
+  const ings=[...document.querySelectorAll('#arIngList .ar-ing')].map(row=>({
+    emoji:row.querySelector('.ai-e').value.trim()||'🥤',
+    name:row.querySelector('.ai-n').value.trim(),
+    qty:parseFloat(row.querySelector('.ai-q').value)||1,
+    unit:row.querySelector('.ai-u').value,
+    why:row.dataset.why||''
+  })).filter(i=>i.name);
+  return {name:g('arName'),for:g('arFor'),when:g('arWhen')||'Anytime',wl:arWl,wlTag:g('arWlTag')||'Your pick',note:g('arNote'),ingredients:ings};
+}
+function arSave(){
+  const o=arReadForm();
+  if(!o.name)return toast('Give your recipe a name');
+  if(!o.ingredients.length)return toast('Add at least one ingredient');
+  arCommit(o); toast('⭐ Saved — see it under My finds in Recipes');
+}
+function arCommit(o){
+  const items=[];
+  (o.ingredients||[]).forEach(ing=>{
+    let id=arMatchExisting(ing.name);
+    if(!id){
+      id='cu_'+ing.name.toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'')+'_'+Math.random().toString(36).slice(2,6);
+      S.customIngredients[id]={e:ing.emoji||'🥤',n:ing.name,product:ing.name,pkg:'check in store',price:0,perPkg:1,unit:ing.unit||'cup',group:'myfinds',accent:'#a855f7',custom:true};
+    }
+    items.push([id,Number(ing.qty)||1]);
+  });
+  const r={id:'myr_'+Date.now().toString(36),name:o.name,cat:'My finds',for:o.for||'',pill:'My recipe',
+    makes:'~16 oz · your recipe',wl:Math.max(1,Math.min(3,o.wl||2)),wlTag:o.wlTag||'Your pick',
+    when:o.when||'Anytime',whenIcon:'🥤',note:o.note||'A recipe you added.',
+    bullets:(o.ingredients||[]).slice(0,6).map(i=>[i.emoji||'•',i.name,i.why||'in this recipe']),
+    items:items,custom:true};
+  S.customRecipes.push(r); S.servings[r.id]=1;
+  markChanged(); mergeCustom();
+  renderRecipes(); refreshList(); renderAdd();
+}
+function arDel(id){
+  S.customRecipes=S.customRecipes.filter(r=>r.id!==id);
+  delete S.servings[id]; delete S.selRecipes[id];
+  const used=new Set(); S.customRecipes.forEach(r=>r.items.forEach(it=>used.add(it[0])));
+  Object.keys(S.customIngredients).forEach(k=>{ if(!used.has(k)) delete S.customIngredients[k]; });
+  markChanged(); mergeCustom(); renderRecipes(); refreshList(); renderAdd(); toast('Recipe removed');
+}
+function arSaveKey(){
+  const k=((document.getElementById('arKey')||{}).value||'').trim();
+  const m=(document.getElementById('arModel')||{}).value;
+  if(k)localStorage.setItem(AR_KEY_LS,k);
+  if(m)localStorage.setItem(AR_MODEL_LS,m);
+  toast('🔑 Settings saved'); renderAdd();
+}
+function arClearKey(){ localStorage.removeItem(AR_KEY_LS); toast('Key removed'); renderAdd(); }
+
+function renderAdd(){
+  const host=document.getElementById('pane-add'); if(!host)return;
+  const keySet=!!arGetKey(), model=arGetModel();
+  const mine=(S.customRecipes||[]);
+  const mineRows = mine.length
+    ? mine.map(r=>{const ic=(r.bullets&&r.bullets[0]&&r.bullets[0][0])||'⭐';
+        return '<div class="ar-mine-row"><span class="e">'+ic+'</span><span class="nm">'+arEsc(r.name)+'<small>'+r.items.length+' ingredients · '+arEsc(r.when||'')+'</small></span><button class="ar-del" onclick="arDel(\''+r.id+'\')">Delete</button></div>';}).join('')
+    : '<div class="hint" style="padding:6px 0">No saved recipes yet. Add one below — it appears in the <b>Recipes</b> tab under ⭐ My finds and flows into your shopping list.</div>';
+  const opt=(v,l)=>'<option value="'+v+'" '+(v===model?'selected':'')+'>'+l+'</option>';
+  host.innerHTML=
+   '<p class="ar-intro">Add your own smoothies — type one in, paste a recipe or social caption, drop a link, or snap a photo. Saved recipes show up in the <b>Recipes</b> tab and scale into your shopping list like the built-ins.</p>'
+   +'<div class="ar-phases">'
+     +'<div class="ar-phase" onclick="document.getElementById(\'arFormSec\').scrollIntoView({behavior:\'smooth\'})"><b>① Type it in</b><small>Manual form — no AI needed</small></div>'
+     +'<div class="ar-phase" onclick="document.getElementById(\'arImportSec\').scrollIntoView({behavior:\'smooth\'})"><b>② Paste / link</b><small>AI reads text, captions & URLs</small></div>'
+     +'<div class="ar-phase" onclick="document.getElementById(\'arImageSec\').scrollIntoView({behavior:\'smooth\'})"><b>③ Photo</b><small>AI reads a screenshot</small></div>'
+   +'</div>'
+
+   // Phase 2
+   +'<div class="ar-sec" id="arImportSec"><h3>② Import from text or a link</h3>'
+     +'<div class="hint">Paste a recipe, an Instagram/TikTok caption, or a transcript — or drop a recipe URL. AI turns it into an editable recipe below.'+(keySet?'':' <b style="color:var(--amber)">Add your API key in Settings first.</b>')+'</div>'
+     +'<div class="ar-field"><label>Paste recipe / caption / transcript</label><textarea id="arText" class="ar-area" placeholder="e.g. Glowing Greens Smoothie 🥬 1 cup almond milk, 1 banana, big handful spinach, 1 tbsp chia, squeeze of lime..."></textarea></div>'
+     +'<div class="ar-actions"><button class="btn primary" id="arTextBtn" onclick="arFromText()">✨ Parse text with AI</button></div>'
+     +'<div class="ar-field" style="margin-top:14px"><label>…or paste a recipe link</label><input id="arUrl" class="ar-input" placeholder="https://…  (works best on recipe websites)"></div>'
+     +'<div class="ar-actions"><button class="btn" id="arUrlBtn" onclick="arFromUrl()">🔗 Import from link</button></div>'
+   +'</div>'
+
+   // Phase 3
+   +'<div class="ar-sec" id="arImageSec"><h3>③ Import from a photo</h3>'
+     +'<div class="hint">Snap or upload a screenshot of a recipe card and AI reads it.'+(keySet?'':' <b style="color:var(--amber)">Needs your API key (Settings).</b>')+'</div>'
+     +'<div class="ar-actions"><label class="btn primary" id="arImgBtn" style="cursor:pointer">📷 Choose / take a photo<input type="file" accept="image/*" style="display:none" onchange="arFromImage(this)"></label></div>'
+     +'<div class="hint" style="margin-top:12px">🎥 <b>Video / Reels:</b> there\'s no audio transcription in the browser yet — paste the caption or a transcript into box ② above. Ask me to build a small local helper (yt-dlp + Whisper) if you want one-tap video import.</div>'
+   +'</div>'
+
+   // Phase 1 — form (also the review/edit target for AI imports)
+   +'<div class="ar-sec" id="arFormSec"><h3>① Recipe details</h3>'
+     +'<div class="hint">Fill this in yourself, or let an import above populate it — then tweak and save.</div>'
+     +'<div class="ar-field"><label>Name</label><input id="arName" class="ar-input" placeholder="e.g. Tropical Glow"></div>'
+     +'<div class="ar-row2"><div class="ar-field"><label>Good for</label><input id="arFor" class="ar-input" placeholder="e.g. Skin & energy"></div>'
+       +'<div class="ar-field"><label>Best time</label><input id="arWhen" class="ar-input" placeholder="e.g. Morning"></div></div>'
+     +'<div class="ar-row2"><div class="ar-field"><label>Weight-loss rating</label><div class="ar-dots" id="arDots"><button class="ar-dot" data-n="1" onclick="arSetWl(1)">1</button><button class="ar-dot" data-n="2" onclick="arSetWl(2)">2</button><button class="ar-dot" data-n="3" onclick="arSetWl(3)">3</button></div></div>'
+       +'<div class="ar-field"><label>Rating label</label><input id="arWlTag" class="ar-input" placeholder="e.g. Light & lean"></div></div>'
+     +'<div class="ar-field"><label>Why this combo works</label><input id="arNote" class="ar-input" placeholder="One line on the benefit"></div>'
+     +'<div class="ar-field"><label>Ingredients (per 1 smoothie)</label><div class="ar-ings" id="arIngList"></div>'
+       +'<button class="ar-add-ing" onclick="arAddIngRow()">＋ Add ingredient</button></div>'
+     +'<div class="ar-actions"><button class="btn primary" onclick="arSave()">⭐ Save recipe</button><button class="btn" onclick="arClearForm()">Clear</button></div>'
+   +'</div>'
+
+   // My recipes
+   +'<div class="ar-sec"><h3>⭐ My recipes <span style="color:var(--mut);font-weight:400;font-size:14px">('+mine.length+')</span></h3>'
+     +'<div class="ar-mine">'+mineRows+'</div>'
+   +'</div>'
+
+   // Settings
+   +'<div class="ar-sec"><h3>🔑 AI settings</h3>'
+     +'<div class="hint">The import features call Claude with your own Anthropic API key. '+(keySet?'<b style="color:var(--lime)">✓ Key saved.</b>':'No key yet.')+'</div>'
+     +'<div class="ar-field"><label>Anthropic API key</label><input id="arKey" class="ar-input" type="password" placeholder="'+(keySet?'•••••••• (saved — paste a new one to replace)':'sk-ant-…')+'"></div>'
+     +'<div class="ar-field"><label>Model</label><select id="arModel" class="ar-sel">'+opt('claude-opus-4-8','Claude Opus 4.8 — most capable')+opt('claude-haiku-4-5','Claude Haiku 4.5 — cheapest, great for this')+opt('claude-sonnet-4-6','Claude Sonnet 4.6 — balanced')+'</select></div>'
+     +'<div class="ar-actions"><button class="btn primary" onclick="arSaveKey()">Save settings</button>'+(keySet?'<button class="btn" onclick="arClearKey()">Remove key</button>':'')+'</div>'
+     +'<div class="ar-key-note">🔒 Your key is stored <b>only in this browser</b> (localStorage) and sent straight to Anthropic — it is never put in the phone-sync data. Get a key at console.anthropic.com. Parsing a recipe costs a fraction of a cent (cheapest on Haiku). <b>For a shared/public setup</b> we should move the key into a Cloudflare Worker later so it is never exposed.</div>'
+   +'</div>';
+  arSetWl(arWl);
+  if(!document.querySelector('#arIngList .ar-ing'))arAddIngRow();
+}
+
+const BASE_RECIPE_COUNT=RECIPES.length;
+const BASE_ING_KEYS=Object.keys(ING);
+mergeCustom();
+
+renderRecipes();renderIngredients();refreshList();renderHistory();renderAdd();
 
 /* ============ SYNC INIT ============ */
 (function initSync(){
