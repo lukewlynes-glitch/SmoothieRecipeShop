@@ -364,6 +364,27 @@
   @media(prefers-reduced-motion:reduce){
     *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important;}
   }
+
+  /* — version + manual update control (footer) — */
+  .footver{display:flex;align-items:center;gap:10px;margin-top:14px;}
+  .footver #appVer{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11px;font-weight:700;
+    color:var(--mut);background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:99px;padding:3px 10px;letter-spacing:.04em;}
+  .verbtn{font-family:var(--font-body);font-size:12.5px;font-weight:700;color:var(--mut);
+    background:transparent;border:1px solid var(--line);border-radius:99px;padding:6px 13px;cursor:pointer;transition:.15s;}
+  .verbtn:hover{color:var(--lime);border-color:var(--lime2);}
+  .verbtn:active{transform:translateY(1px);}
+  .verbtn.spin{pointer-events:none;opacity:.7;}
+
+  /* — "update available" banner — */
+  #updBanner{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(24px);
+    display:none;align-items:center;gap:14px;z-index:55;
+    background:linear-gradient(170deg,#19241e,#121b16);border:1px solid var(--lime2);
+    border-radius:14px;padding:12px 14px 12px 18px;box-shadow:0 14px 40px -10px rgba(0,0,0,.7),0 0 0 1px rgba(141,242,152,.15);
+    opacity:0;transition:.3s;max-width:calc(100% - 32px);}
+  #updBanner.show{display:flex;opacity:1;transform:translateX(-50%) translateY(0);}
+  #updBanner .ub-txt{font-size:13.5px;font-weight:600;color:var(--txt);}
+  #updBanner .ub-txt small{display:block;color:var(--mut);font-size:12px;font-weight:500;}
+  #updBanner button{font-family:var(--font-body);white-space:nowrap;}
 </style>
 </head>
 <body>
@@ -606,10 +627,18 @@
     🔗 <a href="loblaws_shopping_list.html" style="color:var(--lime);font-weight:600;">Open the full Loblaws grocery checklist →</a> (the wider weekly shop)<br>
     Built for Luke's fat-loss toolkit · pairs with the Loblaws shopping list &amp; Lyfe Tracker.<br>
     <b>Not medical advice</b> — adjust to how your body &amp; weekly weigh-in actually respond. Product label verified June 2026 via PC public catalogue.
+    <div class="footver">
+      <span id="appVer">v9</span>
+      <button class="verbtn" onclick="checkForUpdate()">↻ Check for updates</button>
+    </div>
   </div>
 </div>
 
 <div id="toast"></div>
+<div id="updBanner">
+  <div class="ub-txt">✨ New version available<small>Tap update to get the latest</small></div>
+  <button class="btn primary" onclick="applyUpdate()">Update</button>
+</div>
 <div id="storeModal">
   <div class="st-head">
     <div class="st-top">
@@ -1684,9 +1713,46 @@ renderRecipes();renderIngredients();refreshList();renderHistory();
   if(S.syncId){ startSyncLoop(); syncPull(); }
 })();
 
-/* ============ PWA: install + offline ============ */
+/* ============ PWA: install + offline + self-update ============ */
+let swReg=null, reloading=false;
+function showUpdateBanner(){const b=document.getElementById('updBanner');if(b)b.classList.add('show');}
+function applyUpdate(){
+  // tell the waiting/installed worker to take over; controllerchange then reloads us
+  const w = swReg && (swReg.waiting || swReg.installing);
+  if(w){ w.postMessage({type:'SKIP_WAITING'}); }
+  else { location.reload(); }
+}
+async function checkForUpdate(){
+  const btn=document.querySelector('.verbtn');
+  if(!('serviceWorker' in navigator) || !swReg){ location.reload(); return; }
+  if(btn){btn.classList.add('spin');btn.textContent='↻ Checking…';}
+  toast('🔄 Checking for updates…');
+  try{
+    await swReg.update();
+    // give the browser a moment to find/install a new worker
+    await new Promise(r=>setTimeout(r,1200));
+    if(swReg.waiting || swReg.installing){ applyUpdate(); return; }
+    toast('✅ You’re on the latest version');
+  }catch(e){ toast('Could not check — try again online'); }
+  if(btn){btn.classList.remove('spin');btn.textContent='↻ Check for updates';}
+}
 if('serviceWorker' in navigator && location.protocol.startsWith('http')){
-  navigator.serviceWorker.register('smoothie_sw.js').catch(()=>{});
+  navigator.serviceWorker.register('smoothie_sw.js').then(reg=>{
+    swReg=reg;
+    // a new worker started installing → watch it
+    reg.addEventListener('updatefound',()=>{
+      const nw=reg.installing;
+      if(!nw) return;
+      nw.addEventListener('statechange',()=>{
+        // only prompt if there was already a controller (i.e. a real update, not first install)
+        if(nw.state==='installed' && navigator.serviceWorker.controller){ showUpdateBanner(); }
+      });
+    });
+  }).catch(()=>{});
+  // when the new worker takes control, reload once to pick up fresh assets
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{
+    if(reloading) return; reloading=true; location.reload();
+  });
 }
 let deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',e=>{
