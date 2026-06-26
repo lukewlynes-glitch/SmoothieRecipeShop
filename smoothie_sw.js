@@ -1,5 +1,5 @@
 /* Smoothie Builder — offline service worker */
-const CACHE = 'smoothie-v12';
+const CACHE = 'smoothie-v13';
 const ASSETS = [
   'index.html',
   'smoothie_manifest.json',
